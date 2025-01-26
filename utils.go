@@ -2,9 +2,39 @@ package main
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
 	"math/rand"
+	"net/http"
+	"os"
+	"regexp"
+	"time"
 )
+
+type shortURL struct {
+	ShortURL    string    `json:"shortURL"`
+	Url         string    `json:"url"`
+	DateCreated time.Time `json:"dateCreated"`
+	Pin         string    `json:"pin"`
+}
+
+func initDB() *sql.DB {
+	connStr := "user=" + os.Getenv("username") + " dbname=shorty" + " password=" + os.Getenv("password") + " sslmode=disable"
+	db, err := sql.Open("postgres", connStr)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return db
+}
+
+func createURL(url string, db *sql.DB) shortURL {
+	return shortURL{
+		ShortURL:    generateKey(db),
+		Url:         url,
+		DateCreated: time.Now(),
+		Pin:         generatePin(),
+	}
+}
 
 func flattenForm(form map[string][]string) map[string]string {
 	flatMap := make(map[string]string)
@@ -51,4 +81,21 @@ func generatePin() string {
 		pin += string(chars[rand.Intn(len(chars))])
 	}
 	return pin
+}
+
+func checkURLValid(url string) (bool, error) {
+	correctRegex := "[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)"
+
+	val, err := regexp.MatchString(correctRegex, url)
+	if err != nil {
+		return false, fmt.Errorf("error matching url: %v", err)
+	}
+	get, err := http.Get(url)
+	if err != nil {
+		return false, fmt.Errorf("error making get request: %v", err)
+	}
+	if get.StatusCode >= 400 {
+		return false, fmt.Errorf("url is not valid")
+	}
+	return val, nil
 }
