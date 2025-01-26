@@ -19,7 +19,7 @@ type shortURL struct {
 }
 
 func initDB() *sql.DB {
-	connStr := "user=" + os.Getenv("username") + " dbname=shorty" + " password=" + os.Getenv("password") + " sslmode=disable"
+	connStr := "user=" + os.Getenv("USERNAME") + " dbname=shorty" + " password=" + os.Getenv("PASSWORD") + " sslmode=disable"
 	db, err := sql.Open("postgres", connStr)
 	if err != nil {
 		log.Fatal(err)
