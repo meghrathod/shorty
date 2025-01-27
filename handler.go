@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"log"
 	"net/http"
 	"strings"
@@ -40,7 +41,9 @@ func searchAndRedirect(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 }
 
 func handleNewURL(w http.ResponseWriter, r *http.Request, db *sql.DB) {
+
 	if err := r.ParseForm(); err != nil {
+		fmt.Println(err)
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}

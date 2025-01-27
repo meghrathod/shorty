@@ -15,9 +15,9 @@ func main() {
 		log.Fatal("Error loading .env file")
 	}
 	db := initDB()
-	http.HandleFunc("/{path...}", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/{path...}", enableCors(func(w http.ResponseWriter, r *http.Request) {
 		handleURL(w, r, db)
-	})
+	}))
 
 	if err := http.ListenAndServe(":8080", nil); err != nil {
 		log.Fatal(err)
