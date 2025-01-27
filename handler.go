@@ -17,9 +17,25 @@ func handleURL(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 		handleDeleteURL(w, r, db)
 		return
 	} else {
-		//searchAndRedirect(w, r, db)
+		searchAndRedirect(w, r, db)
 		return
 	}
+
+}
+
+func searchAndRedirect(w http.ResponseWriter, r *http.Request, db *sql.DB) {
+	name := r.URL.Path[1:]
+	stmt, err := db.Prepare("SELECT * FROM urls WHERE name = $1")
+	if err != nil {
+		http.Error(w, "Error selecting from database", http.StatusInternalServerError)
+		return
+	}
+	var url shortURL
+	err = stmt.QueryRow(name).Scan(&url.ShortURL, &url.Url, &url.DateCreated, &url.Pin)
+	if err != nil {
+		http.Error(w, "URL not found", http.StatusNotFound)
+	}
+	http.Redirect(w, r, url.Url, http.StatusPermanentRedirect)
 
 }
 
