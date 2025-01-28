@@ -3,10 +3,10 @@ package main
 import (
 	"database/sql"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"log"
 	"net/http"
+	"strconv"
 	"strings"
 )
 
@@ -100,43 +100,36 @@ func handleDeleteURL(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 	if res["pin"] == "" {
 		http.Error(w, "Pin is required", http.StatusBadRequest)
 	}
-	pin := res["pin"]
-	name := res["name"]
-	stmt, err := db.Prepare("SELECT * FROM urls WHERE name = $1")
+	pin, err := strconv.Atoi(res["pin"])
+	name := res["url"]
+	stmt, err := db.Prepare("SELECT * FROM urls WHERE name = $1 and pin = $2")
 	if err != nil {
 		http.Error(w, "Error selecting from database", http.StatusInternalServerError)
 		return
 	}
-	rows, err := stmt.Query(name)
-	if err != nil {
-		if errors.Is(err, sql.ErrNoRows) {
-			http.Error(w, "URL not found", http.StatusNotFound)
-			return
-		}
-		http.Error(w, "Error selecting from database", http.StatusInternalServerError)
-	}
+	row := stmt.QueryRow(name, pin)
+
 	var url shortURL
-	if rows == nil {
+	if row == nil {
 		http.Error(w, "URL not found", http.StatusNotFound)
 		return
 	}
-	for rows.Next() {
-		err = rows.Scan(&url.ShortURL, &url.Url, &url.DateCreated, &url.Pin)
-		if err != nil {
-			http.Error(w, "Error scanning from database", http.StatusInternalServerError)
-			return
-		}
-		if url.Pin == pin {
-			stmt, err := db.Prepare("DELETE FROM urls WHERE name = $1 AND pin = $2")
-			if err != nil {
-				http.Error(w, "Error deleting from database", http.StatusInternalServerError)
-				return
-			}
-			_, err = stmt.Exec(url.ShortURL, pin)
-			w.WriteHeader(http.StatusOK)
-			return
-		}
+	err = row.Scan(&url.ShortURL, &url.Url, &url.DateCreated, &url.Pin)
+	if err != nil {
+		http.Error(w, "Error selecting from database", http.StatusInternalServerError)
+		return
 	}
-	http.Error(w, "Invalid pin", http.StatusBadRequest)
+	stmt, err = db.Prepare("DELETE FROM urls WHERE name = $1 and pin = $2")
+	if err != nil {
+		http.Error(w, "Error deleting from database", http.StatusInternalServerError)
+		return
+	}
+	_, err = stmt.Exec(name, pin)
+	if err != nil {
+		http.Error(w, "Error deleting from database", http.StatusInternalServerError)
+		return
+	}
+	w.WriteHeader(http.StatusOK)
+	return
 
 }

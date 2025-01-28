@@ -105,22 +105,23 @@ func enableCors(next http.HandlerFunc) http.HandlerFunc {
 		// Get allowed origin from .env
 		allowedOrigin := os.Getenv("ALLOWED_ORIGIN")
 		if allowedOrigin == "" {
-			allowedOrigin = "*" // Default to all origins if not set (not recommended for production)
+			allowedOrigin = "http://localhost:5173" // Default to Vite dev server
 		}
 
 		// Set CORS headers
 		w.Header().Set("Access-Control-Allow-Origin", allowedOrigin)
 		w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
 		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
-		w.Header().Set("Access-Control-Allow-Credentials", "true")
+		w.Header().Set("Access-Control-Allow-Credentials", "true") // Support credentials if needed
 
 		// Handle preflight OPTIONS requests
-		if r.Method == "OPTIONS" {
-			w.WriteHeader(http.StatusOK)
+		if r.Method == http.MethodOptions {
+			// Preflight requests need to respond early with headers and status 204
+			w.WriteHeader(http.StatusNoContent)
 			return
 		}
 
-		// Forward the request to the next handler
+		// For other requests, proceed to the actual handler
 		next(w, r)
 	}
 }
