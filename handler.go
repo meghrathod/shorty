@@ -25,6 +25,10 @@ func handleURL(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 }
 
 func searchAndRedirect(w http.ResponseWriter, r *http.Request, db *sql.DB) {
+	if r.Method != "GET" {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
 	name := r.URL.Path[1:]
 	stmt, err := db.Prepare("SELECT * FROM urls WHERE name = $1")
 	if err != nil {
@@ -41,7 +45,10 @@ func searchAndRedirect(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 }
 
 func handleNewURL(w http.ResponseWriter, r *http.Request, db *sql.DB) {
-
+	if r.Method != "POST" {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
 	if err := r.ParseForm(); err != nil {
 		fmt.Println(err)
 		http.Error(w, err.Error(), http.StatusBadRequest)
