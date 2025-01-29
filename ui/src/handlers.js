@@ -54,8 +54,10 @@ export const handleDelete = async (deletedUrl, pin, urls, setUrls, setAlert) => 
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ "url":deletedUrl,
-            "pin":pin})
+            body: JSON.stringify({
+                "url":deletedUrl,
+                "pin":pin
+            })
         });
 
         if (!response.ok) {
