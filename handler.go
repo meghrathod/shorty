@@ -3,7 +3,7 @@ package main
 import (
 	"database/sql"
 	"encoding/json"
-	"fmt"
+	"io"
 	"log"
 	"net/http"
 	"strconv"
@@ -49,12 +49,13 @@ func handleNewURL(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
-	if err := r.ParseForm(); err != nil {
-		fmt.Println(err)
-		http.Error(w, err.Error(), http.StatusBadRequest)
+	reqBody, err := io.ReadAll(r.Body)
+	if err != nil {
+		http.Error(w, "Error reading request body", http.StatusInternalServerError)
 		return
 	}
-	res := flattenForm(r.Form)
+	var res map[string]string
+	err = json.Unmarshal(reqBody, &res)
 	if res["url"] == "" {
 		http.Error(w, "url is required", http.StatusBadRequest)
 		return
@@ -64,7 +65,7 @@ func handleNewURL(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 		url = "http://" + url
 	}
 
-	_, err := checkURLValid(url)
+	_, err = checkURLValid(url)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
@@ -99,11 +100,13 @@ func handleDeleteURL(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
-	if err := r.ParseForm(); err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+	reqBody, err := io.ReadAll(r.Body)
+	if err != nil {
+		http.Error(w, "Error reading request body", http.StatusInternalServerError)
 		return
 	}
-	res := flattenForm(r.Form)
+	var res map[string]string
+	err = json.Unmarshal(reqBody, &res)
 	if res["pin"] == "" {
 		http.Error(w, "Pin is required", http.StatusBadRequest)
 	}

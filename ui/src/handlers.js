@@ -13,11 +13,12 @@ export const handleGenerate = async (url, setUrl, urls, setUrls, setAlert) => {
     }
 
     try {
-        const response = await fetch(`${serverDomain}/new?url=${encodeURIComponent(url)}`, {
+        const response = await fetch(`${serverDomain}/new`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
+            body: JSON.stringify({ "url":url })
         });
 
         if (!response.ok) {
@@ -48,11 +49,13 @@ export const handleGenerate = async (url, setUrl, urls, setUrls, setAlert) => {
 
 export const handleDelete = async (deletedUrl, pin, urls, setUrls, setAlert) => {
     try {
-        const response = await fetch(`${serverDomain}/delete?url=${encodeURIComponent(deletedUrl)}&pin=${pin}`, {
+        const response = await fetch(`${serverDomain}/delete`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
             },
+            body: JSON.stringify({ "url":deletedUrl,
+            "pin":pin})
         });
 
         if (!response.ok) {
