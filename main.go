@@ -1,6 +1,7 @@
 package main
 
 import (
+	"cmp"
 	"database/sql"
 	"github.com/joho/godotenv"
 	_ "github.com/joho/godotenv"
@@ -8,6 +9,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 )
 
 func main() {
@@ -26,7 +28,8 @@ func main() {
 		handleURL(w, r, db)
 	}))
 
-	if err := http.ListenAndServe(":8080", nil); err != nil {
+	port := cmp.Or(os.Getenv("PORT"), strconv.Itoa(3000))
+	if err := http.ListenAndServe(":"+port, nil); err != nil {
 		log.Fatal(err)
 	}
 	defer func(db *sql.DB) {
