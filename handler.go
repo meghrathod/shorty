@@ -17,6 +17,14 @@ func handleURL(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 	} else if r.URL.Path == "/delete" {
 		handleDeleteURL(w, r, db)
 		return
+	} else if r.URL.Path == "/ping" {
+		http.HandleFunc("/ping", func(w http.ResponseWriter, r *http.Request) {
+			w.WriteHeader(http.StatusOK)
+			_, err := w.Write([]byte("pong"))
+			if err != nil {
+				http.Error(w, "Error writing to response", http.StatusInternalServerError)
+			}
+		})
 	} else {
 		searchAndRedirect(w, r, db)
 		return
