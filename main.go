@@ -7,13 +7,20 @@ import (
 	_ "github.com/lib/pq"
 	"log"
 	"net/http"
+	"os"
 )
 
 func main() {
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
+	appEnv := os.Getenv("APP_ENV") // Check for environment: development/production
+	if appEnv == "development" {
+		err := godotenv.Load()
+		if err != nil {
+			log.Println("No .env file found, relying on system environment variables")
+		}
+	} else {
+		log.Println("Running in production mode, skipping .env loading")
 	}
+
 	db := initDB()
 	http.HandleFunc("/{path...}", enableCors(func(w http.ResponseWriter, r *http.Request) {
 		handleURL(w, r, db)

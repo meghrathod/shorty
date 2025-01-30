@@ -36,16 +36,6 @@ func createURL(url string, db *sql.DB) shortURL {
 	}
 }
 
-func flattenForm(form map[string][]string) map[string]string {
-	flatMap := make(map[string]string)
-	for key, values := range form {
-		if len(values) > 0 {
-			flatMap[key] = values[0] // Take the first value
-		}
-	}
-	return flatMap
-}
-
 func generateKey(db *sql.DB) string {
 	prohibited := map[string]bool{"new": true, "delete": true}
 	chars := "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
