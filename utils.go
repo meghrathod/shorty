@@ -92,14 +92,23 @@ func checkURLValid(url string) (bool, error) {
 
 func enableCors(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		// Get allowed origin from .env
+		// Get allowed origin from environment variable
 		allowedOrigin := os.Getenv("ALLOWED_ORIGIN")
 		if allowedOrigin == "" {
-			allowedOrigin = "http://localhost:5173" // Default to Vite dev server
+			allowedOrigin = "http://localhost:5173" // Default for development
 		}
 
-		// Set CORS headers
-		w.Header().Set("Access-Control-Allow-Origin", allowedOrigin)
+		// Dynamically match the request's Origin with the configured allowed origin
+		origin := r.Header.Get("Origin")
+		fmt.Println(allowedOrigin)
+		if origin == allowedOrigin {
+			w.Header().Set("Access-Control-Allow-Origin", origin)
+		} else {
+			// If CORS origin doesn't match allowedOrigin, reject the request
+			http.Error(w, "CORS policy: Origin not allowed", http.StatusForbidden)
+			return
+		}
+
 		w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
 		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
 		w.Header().Set("Access-Control-Allow-Credentials", "true") // Support credentials if needed
