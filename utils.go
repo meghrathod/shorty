@@ -19,7 +19,7 @@ type shortURL struct {
 }
 
 func initDB() *sql.DB {
-	connStr := "user=" + os.Getenv("USERNAME") + " dbname=shorty" + " password=" + os.Getenv("PASSWORD") + " sslmode=disable"
+	connStr := "user=" + os.Getenv("USERNAME") + " dbname=shorty" + " password=" + os.Getenv("PASSWORD") + " sslmode=disable" + " host=" + os.Getenv("DB_HOST") + " port=" + os.Getenv("DB_PORT")
 	db, err := sql.Open("postgres", connStr)
 	if err != nil {
 		log.Fatal(err)
@@ -98,16 +98,16 @@ func enableCors(next http.HandlerFunc) http.HandlerFunc {
 			allowedOrigin = "http://localhost:5173" // Default for development
 		}
 
-		// Dynamically match the request's Origin with the configured allowed origin
-		//origin := r.Header.Get("Origin")
-		//fmt.Println(allowedOrigin)
-		//if origin == allowedOrigin {
-		w.Header().Set("Access-Control-Allow-Origin", "*")
-		//} else {
-		//	// If CORS origin doesn't match allowedOrigin, reject the request
-		//	http.Error(w, "CORS policy: Origin not allowed", http.StatusForbidden)
-		//	return
-		//}
+		//Dynamically match the request's Origin with the configured allowed origin
+		origin := r.Header.Get("Origin")
+		fmt.Println(allowedOrigin)
+		if origin == allowedOrigin {
+			w.Header().Set("Access-Control-Allow-Origin", "*")
+		} else {
+			// If CORS origin doesn't match allowedOrigin, reject the request
+			http.Error(w, "CORS policy: Origin not allowed", http.StatusForbidden)
+			return
+		}
 
 		w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
 		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
