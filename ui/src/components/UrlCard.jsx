@@ -21,12 +21,12 @@ const UrlCard = ({ urlObj, handleDelete }) => {
                     <br />
                     Shortened:{" "}
                     <a
-                        href={import.meta.env.VITE_SERVER_DOMAIN+"/"+urlObj.shortURL}
+                        href={window.location.origin+"/"+urlObj.shortURL}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="fw-bold text-primary"
                     >
-                        {import.meta.env.VITE_SERVER_DOMAIN+"/"+urlObj.shortURL}
+                        {window.location.origin+"/"+urlObj.shortURL}
                     </a>
                     <br />
                     PIN: <span className="text-secondary fw-bold">{urlObj.pin}</span>

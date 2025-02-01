@@ -14,7 +14,7 @@ const PinModal = ({ show, handleClose, url, pin, setPin, handleConfirmDelete }) 
                 <p>
                     You are about to delete the shortened URL <strong>if it exists</strong>:
                     <br />
-                    <a href={import.meta.env.VITE_SERVER_DOMAIN+"/"+url}>{import.meta.env.VITE_SERVER_DOMAIN}/{url}</a>
+                    <a href={window.location.origin+"/"+url}>{import.meta.env.VITE_SERVER_DOMAIN}/{url}</a>
                 </p>
                 <p>Enter the PIN associated with this shortened URL to confirm deletion:</p>
                 <Form.Group controlId="pinInput">

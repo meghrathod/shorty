@@ -38,17 +38,22 @@ func searchAndRedirect(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 		return
 	}
 	name := r.URL.Path[1:]
-	stmt, err := db.Prepare("SELECT * FROM urls WHERE name = $1")
+	stmt, err := db.Prepare("SELECT name, redirect_url FROM urls WHERE name = $1")
 	if err != nil {
 		http.Error(w, "Error selecting from database", http.StatusInternalServerError)
 		return
 	}
-	var url shortURL
-	err = stmt.QueryRow(name).Scan(&url.ShortURL, &url.Url, &url.DateCreated, &url.Pin)
+	var url shortURLResponse
+	err = stmt.QueryRow(name).Scan(&url.ShortURL, &url.LongURL)
 	if err != nil {
 		http.Error(w, "URL not found", http.StatusNotFound)
 	}
-	http.Redirect(w, r, url.Url, http.StatusPermanentRedirect)
+	response, err := json.Marshal(url)
+	w.Header().Set("Content-Type", "application/json")
+	_, err = w.Write(response)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 }
 

@@ -30,7 +30,7 @@ const UrlInputForm = ({ url, setUrl, handleGenerate, handleDeleteClick }) => {
                         After generation, keep your PIN safe if you need to delete the URL in the future.
                     </Form.Text>
                     <Form.Label className="text-muted mt-3" >
-                        You may also add <code>{"<shorty-keyword>"}</code> from <code>{import.meta.env.VITE_SERVER_DOMAIN}/{"<shorty-keyword>"}</code> for requesting URL deletion from our database.
+                        You may also add <code>{"<shorty-keyword>"}</code> from <code>{window.location.origin}/{"<shorty-keyword>"}</code> for requesting URL deletion from our database.
                     </Form.Label>
                 </Form.Group>
             </Row>

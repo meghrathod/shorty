@@ -18,6 +18,11 @@ type shortURL struct {
 	Pin         string    `json:"pin"`
 }
 
+type shortURLResponse struct {
+	ShortURL string `json:"shortURL"`
+	LongURL  string `json:"url"`
+}
+
 func initDB() *sql.DB {
 	connStr := "user=" + os.Getenv("USERNAME") + " dbname=" + os.Getenv("DB_NAME") + " password=" + os.Getenv("PASSWORD") + " sslmode=disable" + " host=" + os.Getenv("DB_HOST") + " port=" + os.Getenv("DB_PORT")
 	db, err := sql.Open("postgres", connStr)
