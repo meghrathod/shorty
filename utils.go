@@ -119,7 +119,6 @@ func enableCors(next http.HandlerFunc) http.HandlerFunc {
 
 		//Dynamically match the request's Origin with the configured allowed origin
 		origin := r.Header.Get("Origin")
-		fmt.Println(allowedOrigin)
 		if origin == allowedOrigin {
 			w.Header().Set("Access-Control-Allow-Origin", "*")
 		} else {

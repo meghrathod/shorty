@@ -3,7 +3,6 @@ package main
 import (
 	"database/sql"
 	"encoding/json"
-	"fmt"
 	"io"
 	"log"
 	"net/http"
@@ -12,7 +11,6 @@ import (
 )
 
 func handleURL(w http.ResponseWriter, r *http.Request, db *sql.DB) {
-	fmt.Println(r.URL.Path)
 	if r.URL.Path == "/new" {
 		handleNewURL(w, r, db)
 		return
@@ -95,7 +93,6 @@ func handleAnalytics(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 	}
 
 	name := r.URL.Query().Get("short_url")
-	fmt.Print(name)
 
 	stmt, err := db.Prepare("SELECT * FROM analytics WHERE name = $1")
 	if err != nil {
