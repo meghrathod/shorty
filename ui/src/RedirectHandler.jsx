@@ -1,5 +1,6 @@
 import React, {useEffect} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
+import NotFoundPage from "./pages/404.jsx";
 
 
 const RedirectHandler = () => {
@@ -53,10 +54,9 @@ const RedirectHandler = () => {
                 );
                 if (response.ok) {
                     const data = await response.json();
-                    console.log(data);
                     window.location.href = data.url;
                 } else {
-                    navigate('/');
+                    navigate('/404');
                 }
             } catch (error) {
                 console.error('Error fetching URL:', error);
