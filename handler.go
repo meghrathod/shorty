@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	"encoding/json"
+	"fmt"
 	"io"
 	"log"
 	"net/http"
@@ -11,6 +12,7 @@ import (
 )
 
 func handleURL(w http.ResponseWriter, r *http.Request, db *sql.DB) {
+	fmt.Println(r.URL.Path)
 	if r.URL.Path == "/new" {
 		handleNewURL(w, r, db)
 		return
@@ -25,6 +27,9 @@ func handleURL(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 				http.Error(w, "Error writing to response", http.StatusInternalServerError)
 			}
 		})
+	} else if r.URL.Path == "/analytics" {
+		handleAnalytics(w, r, db)
+		return
 	} else {
 		searchAndRedirect(w, r, db)
 		return
@@ -32,12 +37,36 @@ func handleURL(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 
 }
 
+func addToAnalytics(res *searchURLRequest, db *sql.DB) {
+	stmt, err := db.Prepare("INSERT INTO analytics (name, access_time, user_agent, ip_address, location, country) VALUES ($1, $2, $3, $4, $5, $6)")
+	if err != nil {
+		log.Fatal(err)
+	}
+	_, err = stmt.Exec(res.ShortURL, res.AccessTime, res.UserAgent, res.IpAddress, res.Location, res.Country)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
 func searchAndRedirect(w http.ResponseWriter, r *http.Request, db *sql.DB) {
-	if r.Method != "GET" {
+	if r.Method != "POST" {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
 	name := r.URL.Path[1:]
+
+	reqBody, err := io.ReadAll(r.Body)
+	if err != nil {
+		http.Error(w, "Error reading request body", http.StatusInternalServerError)
+		return
+	}
+	var res searchURLRequest
+	err = json.Unmarshal(reqBody, &res)
+	if err != nil {
+		http.Error(w, "Error parsing JSON", http.StatusBadRequest)
+		return
+	}
+
 	stmt, err := db.Prepare("SELECT name, redirect_url FROM urls WHERE name = $1")
 	if err != nil {
 		http.Error(w, "Error selecting from database", http.StatusInternalServerError)
@@ -55,6 +84,63 @@ func searchAndRedirect(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 		log.Fatal(err)
 	}
 
+	addToAnalytics(&res, db)
+
+}
+
+func handleAnalytics(w http.ResponseWriter, r *http.Request, db *sql.DB) {
+	if r.Method != "GET" {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	name := r.URL.Query().Get("short_url")
+	fmt.Print(name)
+
+	stmt, err := db.Prepare("SELECT * FROM analytics WHERE name = $1")
+	if err != nil {
+		http.Error(w, "Error selecting from database", http.StatusInternalServerError)
+		return
+	}
+	rows, err := stmt.Query(name)
+	if err != nil {
+		http.Error(w, "Error selecting from database", http.StatusInternalServerError)
+		return
+	}
+	var searchRes []searchURLRequest
+	for rows.Next() {
+		var url searchURLRequest
+		err = rows.Scan(&url.ShortURL, &url.AccessTime, &url.UserAgent, &url.IpAddress, &url.Location, &url.Country)
+		if err != nil {
+			http.Error(w, "Error scanning from database", http.StatusInternalServerError)
+			return
+		}
+		searchRes = append(searchRes, url)
+	}
+	stmt, err = db.Prepare("SELECT * FROM urls WHERE name = $1")
+	if err != nil {
+		http.Error(w, "Error selecting from database", http.StatusInternalServerError)
+		return
+	}
+	var url shortURL
+	row := stmt.QueryRow(name)
+	err = row.Scan(&url.ShortURL, &url.Url, &url.DateCreated, &url.Pin)
+	if err != nil {
+		http.Error(w, "Error scanning from database", http.StatusInternalServerError)
+		return
+	}
+
+	res := analyticsResponse{
+		UrlDetails: url,
+		Analytics:  searchRes,
+	}
+
+	response, err := json.Marshal(res)
+	w.Header().Set("Content-Type", "application/json")
+	_, err = w.Write(response)
+	if err != nil {
+		log.Fatal(err)
+	}
 }
 
 func handleNewURL(w http.ResponseWriter, r *http.Request, db *sql.DB) {

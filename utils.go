@@ -23,6 +23,20 @@ type shortURLResponse struct {
 	LongURL  string `json:"url"`
 }
 
+type searchURLRequest struct {
+	ShortURL   string    `json:"url"`
+	AccessTime time.Time `json:"accessTime"`
+	UserAgent  string    `json:"userAgent"`
+	IpAddress  string    `json:"ipAddress"`
+	Location   string    `json:"location"`
+	Country    string    `json:"country"`
+}
+
+type analyticsResponse struct {
+	UrlDetails shortURL           `json:"urlDetails"`
+	Analytics  []searchURLRequest `json:"analytics"`
+}
+
 func initDB() *sql.DB {
 	connStr := "user=" + os.Getenv("USERNAME") + " dbname=" + os.Getenv("DB_NAME") + " password=" + os.Getenv("PASSWORD") + " sslmode=disable" + " host=" + os.Getenv("DB_HOST") + " port=" + os.Getenv("DB_PORT")
 	db, err := sql.Open("postgres", connStr)
