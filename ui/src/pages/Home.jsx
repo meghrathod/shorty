@@ -1,21 +1,22 @@
-import "../App.css";
 import React, { useState, useEffect } from "react";
+import Container from "react-bootstrap/Container";
 import AlertComponent from "../components/Alert.jsx";
 import UrlInputForm from "../components/UrlInputForm.jsx";
 import UrlList from "../components/UrlList.jsx";
 import PinModal from "../components/PinModal.jsx";
-import Container from "react-bootstrap/Container";
 import { handleGenerate, handleDelete, showTemporaryAlert } from "../handlers";
+import { useNavigate } from 'react-router-dom';
 
-function Home() {
+function Home({ setPin }) {
     const [url, setUrl] = useState("");
     const [urls, setUrls] = useState([]);
     const [alert, setAlert] = useState({ show: false, message: "", variant: "" });
-    const [deleteModal, setDeleteModal] = useState(false); // Tracks modal state
-    const [deleteUrl, setDeleteUrl] = useState(""); // URL to be deleted
-    const [pin, setPin] = useState(""); // PIN input by the user
+    const [deleteModal, setDeleteModal] = useState(false);
+    const [analyticsModal, setAnalyticsModal] = useState(false);
+    const [deleteUrl, setDeleteUrl] = useState("");
+    const [pin, setLocalPin] = useState("");
+    const navigate = useNavigate();
 
-    // Load URLs from localStorage when the app starts
     useEffect(() => {
         const storedUrls = JSON.parse(localStorage.getItem("urls"));
         if (storedUrls) {
@@ -23,26 +24,39 @@ function Home() {
         }
     }, []);
 
-    // Open modal when delete is clicked
     const handleDeleteClick = (url) => {
         if (!url) {
             showTemporaryAlert('Please enter a URL for deletion.', 'warning', setAlert);
             return;
         }
-        setDeleteUrl(url); // Set the target URL for deletion
-        setDeleteModal(true); // Show modal
+        setDeleteUrl(url);
+        setDeleteModal(true);
     };
 
-    // Close modal
+    const handleAnalyticsClick = (url) => {
+        if (!url) {
+            showTemporaryAlert('Please enter a URL for analytics.', 'warning', setAlert);
+            return;
+        }
+        setDeleteUrl(url);
+        setAnalyticsModal(true);
+    };
+
     const handleCloseModal = () => {
-        setDeleteModal(false); // Hide modal
-        setPin(""); // Clear PIN input
+        setDeleteModal(false);
+        setAnalyticsModal(false);
+        setLocalPin("");
     };
 
-    // Confirm delete and call the handler
     const handleConfirmDelete = () => {
-        handleDelete(deleteUrl, pin, urls, setUrls, setAlert); // Pass URL and PIN to handleDelete
-        handleCloseModal(); // Close modal
+        handleDelete(deleteUrl, pin, urls, setUrls, setAlert);
+        handleCloseModal();
+    };
+
+    const handleConfirmAnalytics = () => {
+        setPin(pin); // Set the PIN in the App component
+        navigate(`/analytics?short_url=${deleteUrl}&pin=${pin}`);
+        handleCloseModal();
     };
 
     return (
@@ -61,6 +75,7 @@ function Home() {
                     handleGenerate(url, setUrl, urls, setUrls, setAlert)
                 }
                 handleDeleteClick={handleDeleteClick}
+                handleAnalyticsClick={handleAnalyticsClick}
             />
 
             <UrlList
@@ -75,8 +90,17 @@ function Home() {
                 handleClose={handleCloseModal}
                 url={deleteUrl}
                 pin={pin}
-                setPin={setPin}
+                setPin={setLocalPin}
                 handleConfirmDelete={handleConfirmDelete}
+            />
+
+            <PinModal
+                show={analyticsModal}
+                handleClose={handleCloseModal}
+                url={deleteUrl}
+                pin={pin}
+                setPin={setLocalPin}
+                handleConfirmDelete={handleConfirmAnalytics}
             />
         </Container>
     );

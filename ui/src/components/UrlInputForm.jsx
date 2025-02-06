@@ -14,9 +14,9 @@ const UrlInputForm = ({ url, setUrl, handleGenerate, handleDeleteClick }) => {
     };
 
     return (
-        <Form className="mb-4 w-100">
+        <Form className="mb-4 w-100 align-content-center">
             <Row className="mb-3 w-100">
-                <Form.Group controlId="formURL" className="w-100">
+                <Form.Group controlId="formURL" className="w-100 d-flex flex-column align-items-center">
                     <Form.Control
                         type="text"
                         placeholder="Enter URL to shorten or <shorty-keyword> for deletion"

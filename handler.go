@@ -93,8 +93,30 @@ func handleAnalytics(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 	}
 
 	name := r.URL.Query().Get("short_url")
+	pin, err := strconv.Atoi(r.URL.Query().Get("pin"))
+	if err != nil {
+		http.Error(w, "Invalid PIN", http.StatusUnauthorized)
+		return
+	}
 
-	stmt, err := db.Prepare("SELECT * FROM analytics WHERE name = $1")
+	// Verify the PIN
+	stmt, err := db.Prepare("SELECT pin FROM urls WHERE name = $1")
+	if err != nil {
+		http.Error(w, "Error selecting from database", http.StatusInternalServerError)
+		return
+	}
+	var storedPin int
+	err = stmt.QueryRow(name).Scan(&storedPin)
+	if err != nil {
+		http.Error(w, "URL not found", http.StatusNotFound)
+		return
+	}
+	if storedPin != pin {
+		http.Error(w, "Invalid PIN", http.StatusUnauthorized)
+		return
+	}
+
+	stmt, err = db.Prepare("SELECT * FROM analytics WHERE name = $1")
 	if err != nil {
 		http.Error(w, "Error selecting from database", http.StatusInternalServerError)
 		return
