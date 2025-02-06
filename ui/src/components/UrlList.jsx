@@ -3,6 +3,7 @@ import Container from 'react-bootstrap/Container';
 import UrlCard from './UrlCard.jsx';
 
 const UrlList = ({ urls, handleDelete }) => {
+
     return (
         <Container
             className="scrollable-container w-75 p-3"
@@ -15,7 +16,9 @@ const UrlList = ({ urls, handleDelete }) => {
             }}
         >
             {urls.map((urlObj, index) => (
-                <UrlCard key={index} urlObj={urlObj} handleDelete={handleDelete} />
+                <UrlCard  key={index} urlObj={urlObj} handleDelete={handleDelete} margin={
+                    index===urls.length-1 ? '' : 'mb-3'
+                } />
             ))}
         </Container>
     );

@@ -1,12 +1,10 @@
-// UrlCard.jsx
 import React from 'react';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 
-
-const UrlCard = ({ urlObj, handleDelete }) => {
+const UrlCard = ({ urlObj, handleDelete, margin }) => {
     return (
-        <Card className="mb-3">
+        <Card className={margin}>
             <Card.Body className={"d-flex flex-column align-items-center"}>
                 <p>
                     Original URL:{" "}
@@ -49,7 +47,6 @@ const UrlCard = ({ urlObj, handleDelete }) => {
                         View Analytics
                     </Button>
                 </div>
-
             </Card.Body>
         </Card>
     );
