@@ -1,6 +1,7 @@
 import React, {useEffect} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
 import NotFoundPage from "./pages/404.jsx";
+import LoaderPage from "./pages/LoaderPage.jsx";
 
 
 const RedirectHandler = () => {
@@ -66,7 +67,7 @@ const RedirectHandler = () => {
         fetchIp().then(() => fetchUrl());
     }, [shortUrl, navigate]);
 
-    return <div>Redirecting...</div>;
+    return <LoaderPage message={"Redirecting..."}/>;
 };
 
 export default RedirectHandler;

@@ -9,7 +9,7 @@ const AnalyticsPage = ({ analyticsData }) => {
 
     return (
         <Container className="mt-4">
-            <Card className="mb-4 w-50 mx-auto align-items-center">
+            <Card className="mb-4 col-lg-6 col-sm-12 col-xs-12 mx-auto align-items-center">
                 <Card.Body>
                     <Card.Title style={{ textAlign: "center" }}>URL Details</Card.Title>
                     <Card.Text>Short URL: <a href={window.location.origin+"/"+urlDetails.shortURL}>{window.location.origin+"/"+urlDetails.shortURL}</a></Card.Text>
@@ -18,9 +18,9 @@ const AnalyticsPage = ({ analyticsData }) => {
                     <Card.Text>PIN: {urlDetails.pin}</Card.Text>
                 </Card.Body>
             </Card>
-            <Table striped bordered hover>
+            <Table striped bordered hover className={"text-center"}>
                 <thead>
-                <tr className={"text-center"}>
+                <tr>
                     <th>Access Time</th>
                     <th>User Agent</th>
                     <th>IP Address</th>

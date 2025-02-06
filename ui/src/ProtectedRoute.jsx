@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
+import LoaderPage from "./pages/LoaderPage.jsx";
 
 const ProtectedRoute = ({ element: Component, ...rest }) => {
     const location = useLocation();
@@ -29,7 +30,7 @@ const ProtectedRoute = ({ element: Component, ...rest }) => {
     }, [shortUrl, pin]);
 
     if (isAuthorized === null) {
-        return <div>Loading...</div>;
+        return <LoaderPage message={"Loading"}/>;
     }
     if (!isAuthorized) {
         return <Navigate to="/404" state={{authFail: true}}/>;
