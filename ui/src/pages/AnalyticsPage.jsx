@@ -8,10 +8,10 @@ const AnalyticsPage = ({ analyticsData }) => {
 
 
     return (
-        <Container className={"mt-4"}>
+        <Container className="mt-4">
             <Card className="mb-4 w-50 mx-auto align-items-center">
                 <Card.Body>
-                    <Card.Title className="align-text-center">URL Details</Card.Title>
+                    <Card.Title style={{ textAlign: "center" }}>URL Details</Card.Title>
                     <Card.Text>Short URL: <a href={window.location.origin+"/"+urlDetails.shortURL}>{window.location.origin+"/"+urlDetails.shortURL}</a></Card.Text>
                     <Card.Text>Redirect URL: <a href={urlDetails.url}>{urlDetails.url}</a></Card.Text>
                     <Card.Text>Creation Date: {new Date(urlDetails.dateCreated).toLocaleString()}</Card.Text>
@@ -20,7 +20,7 @@ const AnalyticsPage = ({ analyticsData }) => {
             </Card>
             <Table striped bordered hover>
                 <thead>
-                <tr>
+                <tr className={"text-center"}>
                     <th>Access Time</th>
                     <th>User Agent</th>
                     <th>IP Address</th>

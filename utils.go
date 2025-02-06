@@ -86,7 +86,7 @@ func generateKey(db *sql.DB) string {
 func generatePin() string {
 	chars := "1234567890"
 	pin := ""
-	for i := 0; i < 8; i++ {
+	for i := 0; i < 6; i++ {
 		pin += string(chars[rand.Intn(len(chars))])
 	}
 	return pin
