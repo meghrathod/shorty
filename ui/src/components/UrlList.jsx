@@ -17,7 +17,7 @@ const UrlList = ({ urls, handleDelete }) => {
         >
             {urls.map((urlObj, index) => (
                 <UrlCard  key={index} urlObj={urlObj} handleDelete={handleDelete} margin={
-                    index===urls.length-1 ? '' : 'mb-3'
+                    index===urls.length-1 || urls.length===1 ? '' : 'mb-3'
                 } />
             ))}
         </Container>
