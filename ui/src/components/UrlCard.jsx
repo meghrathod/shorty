@@ -7,7 +7,7 @@ import Button from 'react-bootstrap/Button';
 const UrlCard = ({ urlObj, handleDelete }) => {
     return (
         <Card className="mb-3">
-            <Card.Body>
+            <Card.Body className={"d-flex flex-column align-items-center"}>
                 <p>
                     Original URL:{" "}
                     <a
@@ -31,13 +31,25 @@ const UrlCard = ({ urlObj, handleDelete }) => {
                     <br />
                     PIN: <span className="text-secondary fw-bold">{urlObj.pin}</span>
                 </p>
-                <Button
-                    variant="danger"
-                    size="sm"
-                    onClick={() => handleDelete(urlObj.shortURL, urlObj.pin)}
-                >
-                    Delete
-                </Button>
+                <div className="d-flex justify-content-center">
+                    <Button
+                        variant="danger"
+                        size="sm"
+                        className={"me-2"}
+                        onClick={() => handleDelete(urlObj.shortURL, urlObj.pin)}
+                    >
+                        Delete
+                    </Button>
+                    <Button
+                        variant={"info"}
+                        size="sm"
+                        className={"me-2"}
+                        onClick={() => window.location.href = `/analytics?short_url=${urlObj.shortURL}&pin=${urlObj.pin}`}
+                    >
+                        View Analytics
+                    </Button>
+                </div>
+
             </Card.Body>
         </Card>
     );

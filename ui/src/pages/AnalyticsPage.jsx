@@ -6,6 +6,7 @@ import Container from 'react-bootstrap/Container';
 const AnalyticsPage = ({ analyticsData }) => {
     const { urlDetails, analytics } = analyticsData;
 
+
     return (
         <Container className={"mt-4"}>
             <Card className="mb-4 w-50 mx-auto align-items-center">
@@ -28,15 +29,23 @@ const AnalyticsPage = ({ analyticsData }) => {
                 </tr>
                 </thead>
                 <tbody>
-                {analytics.map((log, index) => (
-                    <tr key={index}>
-                        <td>{new Date(log.accessTime).toLocaleString()}</td>
-                        <td>{log.userAgent}</td>
-                        <td>{log.ipAddress}</td>
-                        <td>{log.location}</td>
-                        <td>{log.country}</td>
-                    </tr>
-                ))}
+                 {
+                    analytics ? (
+                        analytics.map((log, index) => (
+                            <tr key={index}>
+                                <td>{new Date(log.accessTime).toLocaleString()}</td>
+                                <td>{log.userAgent}</td>
+                                <td>{log.ipAddress}</td>
+                                <td>{log.location}</td>
+                                <td>{log.country}</td>
+                            </tr>
+                        ))
+                    ) : (
+                        <tr>
+                            <td colSpan="5" className="text-center">No analytics data available yet.</td>
+                        </tr>
+                    )
+                }
                 </tbody>
             </Table>
         </Container>
