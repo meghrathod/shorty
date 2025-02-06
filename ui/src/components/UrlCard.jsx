@@ -31,20 +31,20 @@ const UrlCard = ({ urlObj, handleDelete, margin }) => {
                 </p>
                 <div className="d-flex justify-content-center">
                     <Button
-                        variant="danger"
-                        size="sm"
-                        className={"me-2"}
-                        onClick={() => handleDelete(urlObj.shortURL, urlObj.pin)}
-                    >
-                        Delete
-                    </Button>
-                    <Button
                         variant={"info"}
                         size="sm"
                         className={"me-2"}
                         onClick={() => window.location.href = `/analytics?short_url=${urlObj.shortURL}&pin=${urlObj.pin}`}
                     >
                         View Analytics
+                    </Button>
+                    <Button
+                        variant="danger"
+                        size="sm"
+                        className={"me-2"}
+                        onClick={() => handleDelete(urlObj.shortURL, urlObj.pin)}
+                    >
+                        Delete
                     </Button>
                 </div>
             </Card.Body>
