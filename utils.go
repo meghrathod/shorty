@@ -38,7 +38,14 @@ type analyticsResponse struct {
 }
 
 func initDB() *sql.DB {
-	connStr := "user=" + os.Getenv("USERNAME") + " dbname=" + os.Getenv("DB_NAME") + " password=" + os.Getenv("PASSWORD") + " sslmode=disable" + " host=" + os.Getenv("DB_HOST") + " port=" + os.Getenv("DB_PORT")
+	connStr := fmt.Sprintf(
+		"user=%s dbname=%s password=%s sslmode=disable host=%s port=%s",
+		os.Getenv("USERNAME"),
+		os.Getenv("DB_NAME"),
+		os.Getenv("PASSWORD"),
+		os.Getenv("DB_HOST"),
+		os.Getenv("DB_PORT"),
+	)
 	db, err := sql.Open("postgres", connStr)
 	if err != nil {
 		log.Fatal(err)
