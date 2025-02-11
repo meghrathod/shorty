@@ -1,58 +1,50 @@
-# Use an official Go image as the base
+# Stage 1: Build the Go application
 FROM golang:latest AS builder
 
-# Set environment variables
-ENV GO111MODULE=on \
-    CGO_ENABLED=0 \
-    GOOS=linux \
-    GOARCH=amd64
-
-# Set working directory inside the container
 WORKDIR /app
 
-# Copy Go modules & download dependencies
 COPY go.mod go.sum ./
-RUN go mod tidy && go mod vendor
+RUN go mod tidy
 
-# Copy the rest of the app source code
 COPY . .
 
-# echo all files in the current directory to logs
-RUN ls -la
+RUN go build -o shorty main.go
 
-# Build the application
-RUN go build -o shorty meghrathod/shorty
-
-# Create a minimal runtime image
+# Stage 2: GeoIP database setup and application image
 FROM debian:bookworm-slim
 
-# Install geoipupdate & cron
-RUN apt-get update && apt-get install -y --no-install-recommends software-properties-common ca-certificates python3-launchpadlib \
-    && add-apt-repository ppa:maxmind/ppa \
-    && apt-get update && apt-get install -y --no-install-recommends geoipupdate cron \
-    && rm -rf /var/lib/apt/lists/* \
-# Set working directory
 WORKDIR /app
 
-# Copy compiled Go binary from builder
+# Copy the setup script
+COPY geoip_setup.sh /app/
+
+# Set environment variables (IMPORTANT: Set these during the build)
+ARG MAXMIND_ACCOUNT_ID
+ARG MAXMIND_LICENSE_KEY
+ENV MAXMIND_ACCOUNT_ID=${MAXMIND_ACCOUNT_ID}
+ENV MAXMIND_LICENSE_KEY=${MAXMIND_LICENSE_KEY}
+
+# Make the script executable
+RUN chmod +x /app/geoip_setup.sh
+
+# Create the GeoIP database directory
+RUN mkdir -p /usr/local/share/GeoIP
+
+# Run the setup script (downloads, installs, and configures GeoIP)
+RUN /app/geoip_setup.sh
+
+# Copy the Go binary
 COPY --from=builder /app/shorty /app/shorty
 
-# Configure geoipupdate using environment variables
-RUN echo "AccountID ${MAXMIND_ACCOUNT_ID}" > /etc/GeoIP.conf && \
-    echo "LicenseKey ${MAXMIND_LICENSE_KEY}" >> /etc/GeoIP.conf && \
-    echo "EditionIDs GeoLite2-City" >> /etc/GeoIP.conf && \
-    echo "DatabaseDirectory /usr/local/share/GeoIP" >> /etc/GeoIP.conf
+# Install cron (and any other dependencies your app needs)
+RUN apt-get update && apt-get install -y --no-install-recommends cron \
+    && rm -rf /var/lib/apt/lists/*
 
-# Run geoipupdate initially
-RUN geoipupdate
+# Add cron job (adjust the schedule as needed)
+RUN echo "0 0 * * 0 root geoipupdate -f /etc/GeoIP.conf" > /etc/cron.d/geoipupdate-cron && \
+    chmod 0644 /etc/cron.d/geoipupdate-cron
 
-# Add a cron job to update GeoIP database every **Sunday at midnight**
-RUN echo "0 0 * * 0 root geoipupdate" > /etc/cron.d/geoipupdate-cron && \
-    chmod 0644 /etc/cron.d/geoipupdate-cron && \
-    crontab /etc/cron.d/geoipupdate-cron
-
-# Start cron and the server
+# Start cron and the application
 CMD service cron start && /app/shorty
 
-# Expose required port
 EXPOSE 8080
