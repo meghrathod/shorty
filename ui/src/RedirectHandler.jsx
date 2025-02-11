@@ -1,6 +1,5 @@
 import React, {useEffect} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
-import NotFoundPage from "./pages/404.jsx";
 import LoaderPage from "./pages/LoaderPage.jsx";
 
 
