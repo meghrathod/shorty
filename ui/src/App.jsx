@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import RedirectHandler from "./RedirectHandler.jsx";
 import Home from "./pages/Home.jsx";
-import AnalyticsPage from "./pages/AnalyticsPage.jsx";
 import NotFoundPage from "./pages/404.jsx";
+import AnalyticsPage from "./pages/AnalyticsPage.jsx";
 import ProtectedRoute from "./ProtectedRoute.jsx";
 import LoaderPage from "./pages/LoaderPage.jsx";
 
@@ -17,6 +17,7 @@ const App = () => {
                 <Route path="/analytics" element={<ProtectedRoute element={AnalyticsPage} pin={pin} />} />
                 <Route path="/404" element={<NotFoundPage />} />
                 <Route path="/:shortUrl" element={<RedirectHandler />} />
+                <Route path="/loader" element={<LoaderPage message={"Loading"} />} />
             </Routes>
         </Router>
     );

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Container from "react-bootstrap/Container";
 import AlertComponent from "../components/Alert.jsx";
 import UrlInputForm from "../components/UrlInputForm.jsx";
 import UrlList from "../components/UrlList.jsx";
@@ -54,19 +53,20 @@ function Home({ setPin }) {
     };
 
     const handleConfirmAnalytics = () => {
-        setPin(pin); // Set the PIN in the App component
+        setPin(pin);
         navigate(`/analytics?short_url=${deleteUrl}&pin=${pin}`);
         handleCloseModal();
     };
 
     return (
-        <Container className="d-flex flex-column align-items-center justify-content-center vh-100">
+        <div className="min-h-screen flex flex-col items-center justify-center p-4">
             <AlertComponent
                 alert={alert}
                 onClose={() => setAlert({ show: false, message: "", variant: "" })}
             />
 
-            <h1 className="mb-4 text-center fw-bold">Shorty ✄</h1>
+
+            <h1 className="text-4xl font-bold mb-8 text-center">Shorty ✄</h1>
 
             <UrlInputForm
                 url={url}
@@ -102,7 +102,7 @@ function Home({ setPin }) {
                 setPin={setLocalPin}
                 handleConfirmDelete={handleConfirmAnalytics}
             />
-        </Container>
+        </div>
     );
 }
 

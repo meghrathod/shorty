@@ -1,18 +1,16 @@
 import React from 'react';
-import Card from 'react-bootstrap/Card';
-import Button from 'react-bootstrap/Button';
 
 const UrlCard = ({ urlObj, handleDelete, margin }) => {
     return (
-        <Card className={margin}>
-            <Card.Body className={"d-flex flex-column align-items-center"}>
-                <p>
+        <div className={`card bg-base-100 shadow-xl ${margin} border border-base-300 rounded-lg`}>
+            <div className="card-body items-center text-center">
+                <p className="text-sm">
                     Original URL:{" "}
                     <a
                         href={urlObj.originalUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-decoration-underline fw-bold"
+                        className="link link-primary font-bold"
                     >
                         {urlObj.originalUrl}
                     </a>
@@ -22,33 +20,29 @@ const UrlCard = ({ urlObj, handleDelete, margin }) => {
                         href={window.location.origin+"/"+urlObj.shortURL}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="fw-bold text-primary"
+                        className="link link-secondary font-bold"
                     >
                         {window.location.origin+"/"+urlObj.shortURL}
                     </a>
                     <br />
-                    PIN: <span className="text-secondary fw-bold">{urlObj.pin}</span>
+                    PIN: <span className="text-gray-500 font-bold">{urlObj.pin}</span>
                 </p>
-                <div className="d-flex justify-content-center">
-                    <Button
-                        variant={"info"}
-                        size="sm"
-                        className={"me-2"}
+                <div className="card-actions justify-center">
+                    <button
+                        className="btn btn-info btn-sm"
                         onClick={() => window.location.href = `/analytics?short_url=${urlObj.shortURL}&pin=${urlObj.pin}`}
                     >
                         View Analytics
-                    </Button>
-                    <Button
-                        variant="danger"
-                        size="sm"
-                        className={"me-2"}
+                    </button>
+                    <button
+                        className="btn btn-error btn-sm"
                         onClick={() => handleDelete(urlObj.shortURL, urlObj.pin)}
                     >
                         Delete
-                    </Button>
+                    </button>
                 </div>
-            </Card.Body>
-        </Card>
+            </div>
+        </div>
     );
 };
 
