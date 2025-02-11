@@ -11,23 +11,26 @@ ENV GO111MODULE=on \
 WORKDIR /app
 
 # Copy Go modules & download dependencies
-COPY go.mod ./
+COPY go.mod go.sum ./
 RUN go mod tidy && go mod vendor
 
 # Copy the rest of the app source code
 COPY . .
 
+# echo all files in the current directory to logs
+RUN ls -la
+
 # Build the application
-RUN go build -o shorty main.go
+RUN go build -o shorty meghrathod/shorty
 
 # Create a minimal runtime image
 FROM debian:bookworm-slim
 
 # Install geoipupdate & cron
-RUN apt-get update && apt-get install -y --no-install-recommends software-properties-common && rm -rf /var/lib/apt/lists/*
-RUN add-apt-repository ppa:maxmind/ppa
-RUN apt-get update && apt-get install -y --no-install-recommends geoipupdate cron
-
+RUN apt-get update && apt-get install -y --no-install-recommends software-properties-common ca-certificates python3-launchpadlib \
+    && add-apt-repository ppa:maxmind/ppa \
+    && apt-get update && apt-get install -y --no-install-recommends geoipupdate cron \
+    && rm -rf /var/lib/apt/lists/* \
 # Set working directory
 WORKDIR /app
 
