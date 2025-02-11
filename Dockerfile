@@ -12,7 +12,7 @@ WORKDIR /app
 
 # Copy Go modules & download dependencies
 COPY go.mod ./
-RUN go mod download
+RUN go mod tidy && go mod vendor
 
 # Copy the rest of the app source code
 COPY . .
