@@ -24,8 +24,9 @@ RUN go build -o shorty main.go
 FROM debian:bookworm-slim
 
 # Install geoipupdate & cron
+RUN apt update && apt install -y software-properties-common && rm -rf /var/lib/apt/lists/*
 RUN add-apt-repository ppa:maxmind/ppa
-RUN apt update && apt install -y geoipupdate cron && rm -rf /var/lib/apt/lists/*
+RUN apt update && apt install -y geoipupdate cron
 
 # Set working directory
 WORKDIR /app
