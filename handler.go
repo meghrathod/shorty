@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	"encoding/json"
+	"fmt"
 	"io"
 	"log"
 	"net/http"
@@ -35,11 +36,14 @@ func handleURL(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 
 }
 
-func addToAnalytics(res *searchURLRequest, db *sql.DB) {
+func addToAnalytics(res *searchURLRequest, db *sql.DB, r *http.Request) {
 	stmt, err := db.Prepare("INSERT INTO analytics (name, access_time, user_agent, ip_address, location, country) VALUES ($1, $2, $3, $4, $5, $6)")
 	if err != nil {
 		log.Fatal(err)
 	}
+	fmt.Println(res.IpAddress)
+	ip, _ := getIP(r)
+	fmt.Println(ip)
 	_, err = stmt.Exec(res.ShortURL, res.AccessTime, res.UserAgent, res.IpAddress, res.Location, res.Country)
 	if err != nil {
 		log.Fatal(err)
@@ -82,7 +86,7 @@ func searchAndRedirect(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 		log.Fatal(err)
 	}
 
-	addToAnalytics(&res, db)
+	addToAnalytics(&res, db, r)
 
 }
 
