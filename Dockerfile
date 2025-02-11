@@ -1,5 +1,5 @@
 # Use an official Go image as the base
-FROM golang:1.21 AS builder
+FROM golang:latest AS builder
 
 # Set environment variables
 ENV GO111MODULE=on \
@@ -24,9 +24,9 @@ RUN go build -o shorty main.go
 FROM debian:bookworm-slim
 
 # Install geoipupdate & cron
-RUN apt update && apt install -y software-properties-common && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y --no-install-recommends software-properties-common && rm -rf /var/lib/apt/lists/*
 RUN add-apt-repository ppa:maxmind/ppa
-RUN apt update && apt install -y geoipupdate cron
+RUN apt-get update && apt-get install -y --no-install-recommends geoipupdate cron
 
 # Set working directory
 WORKDIR /app
