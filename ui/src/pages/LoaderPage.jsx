@@ -4,8 +4,8 @@ const LoaderPage = ({ message }) => {
     return (
         <div className="min-h-screen flex flex-col items-center justify-center bg-base-100">
             {/* Loader wheel */}
-            <div className="radial-progress animate-spin text-primary" style={{ "--value": 80 }}></div>
-            <h1 className="text-xl mt-4">{message}</h1>
+            <div className="loading loading-ring loading-lg" ></div>
+            <h1 className="text-lg mt-4">{message}</h1>
         </div>
     );
 };

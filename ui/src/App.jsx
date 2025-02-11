@@ -6,20 +6,24 @@ import NotFoundPage from "./pages/404.jsx";
 import AnalyticsPage from "./pages/AnalyticsPage.jsx";
 import ProtectedRoute from "./ProtectedRoute.jsx";
 import LoaderPage from "./pages/LoaderPage.jsx";
+import ThemeSwitcher from "./components/ThemeSwitcher.jsx";
 
 const App = () => {
     const [pin, setPin] = useState(""); // Store the PIN
 
     return (
-        <Router>
-            <Routes>
-                <Route path="/" element={<Home setPin={setPin} />} />
-                <Route path="/analytics" element={<ProtectedRoute element={AnalyticsPage} pin={pin} />} />
-                <Route path="/404" element={<NotFoundPage />} />
-                <Route path="/:shortUrl" element={<RedirectHandler />} />
-                <Route path="/loader" element={<LoaderPage message={"Loading"} />} />
-            </Routes>
-        </Router>
+        <div>
+            <ThemeSwitcher />
+            <Router>
+                <Routes>
+                    <Route path="/" element={<Home setPin={setPin} />} />
+                    <Route path="/analytics" element={<ProtectedRoute element={AnalyticsPage} pin={pin} />} />
+                    <Route path="/404" element={<NotFoundPage />} />
+                    <Route path="/:shortUrl" element={<RedirectHandler />} />
+                    <Route path="/loader" element={<LoaderPage message={"Loading"} />} />
+                </Routes>
+            </Router>
+        </div>
     );
 };
 

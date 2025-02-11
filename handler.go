@@ -87,13 +87,25 @@ func searchAndRedirect(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 }
 
 func handleAnalytics(w http.ResponseWriter, r *http.Request, db *sql.DB) {
-	if r.Method != "GET" {
+	if r.Method != "POST" {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
 
 	name := r.URL.Query().Get("short_url")
-	pin := r.URL.Query().Get("pin")
+	//get the pin from post request
+	reqBody, err := io.ReadAll(r.Body)
+	if err != nil {
+		http.Error(w, "Error reading request body", http.StatusInternalServerError)
+		return
+	}
+	var req map[string]string
+	err = json.Unmarshal(reqBody, &req)
+	if req["pin"] == "" {
+		http.Error(w, "Pin is required", http.StatusBadRequest)
+		return
+	}
+	pin := req["pin"]
 
 	// Verify the PIN
 	stmt, err := db.Prepare("SELECT pin FROM urls WHERE name = $1")

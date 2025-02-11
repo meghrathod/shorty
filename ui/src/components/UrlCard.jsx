@@ -2,7 +2,7 @@ import React from 'react';
 
 const UrlCard = ({ urlObj, handleDelete, margin }) => {
     return (
-        <div className={`card bg-base-100 shadow-xl ${margin} border border-base-300 rounded-lg`}>
+        <div className={`card bg-base-100 shadow-xl ${margin} border border-base-300 rounded-lg dark:border-zinc-400`}>
             <div className="card-body items-center text-center">
                 <p className="text-sm">
                     Original URL:{" "}

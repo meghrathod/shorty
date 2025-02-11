@@ -121,7 +121,7 @@ func enableCors(next http.HandlerFunc) http.HandlerFunc {
 		// Get allowed origin from environment variable
 		allowedOrigin := os.Getenv("ALLOWED_ORIGIN")
 		if allowedOrigin == "" {
-			allowedOrigin = "http://localhost:5173" // Default for development
+			allowedOrigin = "*" // Default for development
 		}
 
 		//Dynamically match the request's Origin with the configured allowed origin
