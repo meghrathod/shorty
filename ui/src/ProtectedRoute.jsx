@@ -13,7 +13,15 @@ const ProtectedRoute = ({ element: Component, ...rest }) => {
     useEffect(() => {
         const verifyPin = async () => {
             try {
-                const response = await fetch(`${import.meta.env.VITE_SERVER_DOMAIN}/analytics?short_url=${shortUrl}&pin=${pin}`);
+                const response = await fetch(
+                    `${import.meta.env.VITE_SERVER_DOMAIN}/analytics?short_url=${shortUrl}`,
+                    {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ "pin": pin })
+                    });
                 if (response.ok) {
                     const data = await response.json();
                     setAnalyticsData(data);

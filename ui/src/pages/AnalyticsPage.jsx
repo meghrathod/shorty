@@ -5,7 +5,7 @@ const AnalyticsPage = ({ analyticsData }) => {
 
     return (
         <div className="my-8 mx-3 flex flex-col items-center">
-            <div className="card w-full max-w-5xl border border-base-300 rounded-lg bg-base-100 shadow-xl mb-8 text-center">
+            <div className="card w-full max-w-5xl border border-base-300 dark:border-zinc-400 rounded-lg bg-base-100 shadow-xl mb-8 text-center">
                 <div className="card-body">
                     <p className="text-lg font-bold">Url Details</p>
                     <p>
@@ -31,8 +31,8 @@ const AnalyticsPage = ({ analyticsData }) => {
                 </div>
             </div>
 
-            <div className="overflow-x-auto">
-                <table className="table w-full max-w-5xl border border-base-300 rounded-lg shadow-xl">
+            <div className="overflow-x-auto w-full max-w-5xl">
+                <table className="table border border-separate dark:border-zinc-400 rounded-lg shadow-xl">
                     <thead>
                     <tr>
                         <th>Access Time</th>
@@ -45,7 +45,7 @@ const AnalyticsPage = ({ analyticsData }) => {
                     <tbody>
                     {analytics && analytics.length > 0 ? (
                         analytics.map((log, index) => (
-                            <tr key={index} className="hover:bg-pink-50">
+                            <tr key={index} className="hover:bg-pink-50 dark:hover:bg-pink-700">
                                 <td>{new Date(log.accessTime).toLocaleString()}</td>
                                 <td>{log.userAgent}</td>
                                 <td>{log.ipAddress}</td>
