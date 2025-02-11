@@ -1,38 +1,51 @@
 import React from 'react';
-import Card from 'react-bootstrap/Card';
-import Table from 'react-bootstrap/Table';
-import Container from 'react-bootstrap/Container';
 
 const AnalyticsPage = ({ analyticsData }) => {
     const { urlDetails, analytics } = analyticsData;
 
-
     return (
-        <Container className="mt-4">
-            <Card className="mb-4 col-lg-6 col-sm-12 col-xs-12 mx-auto align-items-center">
-                <Card.Body>
-                    <Card.Title style={{ textAlign: "center" }}>URL Details</Card.Title>
-                    <Card.Text>Short URL: <a href={window.location.origin+"/"+urlDetails.shortURL}>{window.location.origin+"/"+urlDetails.shortURL}</a></Card.Text>
-                    <Card.Text>Redirect URL: <a href={urlDetails.url}>{urlDetails.url}</a></Card.Text>
-                    <Card.Text>Creation Date: {new Date(urlDetails.dateCreated).toLocaleString()}</Card.Text>
-                    <Card.Text>PIN: {urlDetails.pin}</Card.Text>
-                </Card.Body>
-            </Card>
-            <Table striped bordered hover className={"text-center"}>
-                <thead>
-                <tr>
-                    <th>Access Time</th>
-                    <th>User Agent</th>
-                    <th>IP Address</th>
-                    <th>Location</th>
-                    <th>Country</th>
-                </tr>
-                </thead>
-                <tbody>
-                 {
-                    analytics ? (
+        <div className="my-8 mx-3 flex flex-col items-center">
+            <div className="card w-full max-w-5xl border border-base-300 rounded-lg bg-base-100 shadow-xl mb-8 text-center">
+                <div className="card-body">
+                    <p className="text-lg font-bold">Url Details</p>
+                    <p>
+                        Short URL:{" "}
+                        <a
+                            href={window.location.origin + "/" + urlDetails.shortURL}
+                            className="link link-primary"
+                        >
+                            {window.location.origin + "/" + urlDetails.shortURL}
+                        </a>
+                    </p>
+                    <p>
+                        Redirect URL:{" "}
+                        <a
+                            href={urlDetails.url}
+                            className="link link-secondary"
+                        >
+                            {urlDetails.url}
+                        </a>
+                    </p>
+                    <p>Creation Date: {new Date(urlDetails.dateCreated).toLocaleString()}</p>
+                    <p>PIN: {urlDetails.pin}</p>
+                </div>
+            </div>
+
+            <div className="overflow-x-auto">
+                <table className="table w-full max-w-5xl border border-base-300 rounded-lg shadow-xl">
+                    <thead>
+                    <tr>
+                        <th>Access Time</th>
+                        <th>User Agent</th>
+                        <th>IP Address</th>
+                        <th>Location</th>
+                        <th>Country</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {analytics && analytics.length > 0 ? (
                         analytics.map((log, index) => (
-                            <tr key={index}>
+                            <tr key={index} className="hover:bg-pink-50">
                                 <td>{new Date(log.accessTime).toLocaleString()}</td>
                                 <td>{log.userAgent}</td>
                                 <td>{log.ipAddress}</td>
@@ -42,13 +55,15 @@ const AnalyticsPage = ({ analyticsData }) => {
                         ))
                     ) : (
                         <tr>
-                            <td colSpan="5" className="text-center">No analytics data available yet.</td>
+                            <td colSpan="5" className="text-center">
+                                No analytics data available yet.
+                            </td>
                         </tr>
-                    )
-                }
-                </tbody>
-            </Table>
-        </Container>
+                    )}
+                    </tbody>
+                </table>
+            </div>
+        </div>
     );
 };
 

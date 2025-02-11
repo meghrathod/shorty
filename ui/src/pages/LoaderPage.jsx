@@ -1,20 +1,13 @@
 import React from 'react';
-import { Container, Row, Col, Button } from 'react-bootstrap';
 
-const LoaderPage = ({message}) => {
+const LoaderPage = ({ message }) => {
     return (
-        <Container className="d-flex flex-column align-items-center justify-content-center vh-100">
-            <Row>
-                <Col className="text-center">
-                    {/*loader wheel*/}
-                    <div className="spinner-border" role="status">
-                        <span className="visually-hidden">Loading...</span>
-                    </div>
-                    <h1 className="display-5 mt-2">{message}</h1>
-                </Col>
-            </Row>
-        </Container>
+        <div className="min-h-screen flex flex-col items-center justify-center bg-base-100">
+            {/* Loader wheel */}
+            <div className="radial-progress animate-spin text-primary" style={{ "--value": 80 }}></div>
+            <h1 className="text-xl mt-4">{message}</h1>
+        </div>
     );
-}
+};
 
 export default LoaderPage;
