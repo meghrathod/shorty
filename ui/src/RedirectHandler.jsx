@@ -59,7 +59,6 @@ const RedirectHandler = () => {
                     navigate('/404');
                 }
             } catch (error) {
-                console.error('Error fetching URL:', error);
                 navigate('/');
             }
         };

@@ -26,14 +26,12 @@ export const handleGenerate = async (url, setUrl, urls, setUrls, setAlert) => {
         }
 
         const data = await response.json();
-        console.log(data);
 
         const newUrl = {
             shortURL: data.shortURL,
             pin: data.pin,
             originalUrl: url,
         };
-        console.log(newUrl);
 
         // Add new URL to state and save to localStorage
         const updatedUrls = [newUrl, ...urls];

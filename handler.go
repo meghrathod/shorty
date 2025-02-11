@@ -42,12 +42,16 @@ func addToAnalytics(res *searchURLRequest, db *sql.DB, r *http.Request) {
 		log.Fatal(err)
 	}
 	fmt.Println(res.IpAddress)
-	ip, _ := getIP(r)
-	fmt.Println(ip)
-	_, err = stmt.Exec(res.ShortURL, res.AccessTime, res.UserAgent, res.IpAddress, res.Location, res.Country)
-	if err != nil {
-		log.Fatal(err)
-	}
+	go func() {
+		ip, city, country, err := getIP(r)
+		if err != nil {
+			log.Fatal(err)
+		}
+		_, err = stmt.Exec(res.ShortURL, res.AccessTime, res.UserAgent, ip, city, country)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}()
 }
 
 func searchAndRedirect(w http.ResponseWriter, r *http.Request, db *sql.DB) {
