@@ -1,9 +1,9 @@
 #!/bin/sh
 
 # Install geoipupdate (and its dependencies)
-apt-add-repository -y ppa:maxmind/ppa
-apt-get update && apt-get install -y --no-install-recommends geoipupdate ca-certificates gettext
-
+apt-get update && apt-get install -y --no-install-recommends  ca-certificates gettext
+wget -qO geoipupdate.deb https://updates.maxmind.com/app/geoipupdate_7.1.0_linux_amd64.deb #amd64
+RUN dpkg -i geoipupdate.deb
 # Set environment variables (these will be passed in by Docker)
 MAXMIND_ACCOUNT_ID="$MAXMIND_ACCOUNT_ID"
 MAXMIND_LICENSE_KEY="$MAXMIND_LICENSE_KEY"
