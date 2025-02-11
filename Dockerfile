@@ -24,6 +24,7 @@ RUN go build -o shorty main.go
 FROM debian:bookworm-slim
 
 # Install geoipupdate & cron
+RUN add-apt-repository ppa:maxmind/ppa
 RUN apt update && apt install -y geoipupdate cron && rm -rf /var/lib/apt/lists/*
 
 # Set working directory
@@ -35,7 +36,7 @@ COPY --from=builder /app/shorty /app/shorty
 # Configure geoipupdate using environment variables
 RUN echo "AccountID ${MAXMIND_ACCOUNT_ID}" > /etc/GeoIP.conf && \
     echo "LicenseKey ${MAXMIND_LICENSE_KEY}" >> /etc/GeoIP.conf && \
-    echo "EditionIDs GeoLite2-City GeoLite2-Country" >> /etc/GeoIP.conf && \
+    echo "EditionIDs GeoLite2-City" >> /etc/GeoIP.conf && \
     echo "DatabaseDirectory /usr/local/share/GeoIP" >> /etc/GeoIP.conf
 
 # Run geoipupdate initially
