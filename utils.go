@@ -60,7 +60,7 @@ func createURL(url string, db *sql.DB) shortURL {
 	return shortURL{
 		ShortURL:    generateKey(db),
 		Url:         url,
-		DateCreated: time.Now(),
+		DateCreated: time.Now().UTC(),
 		Pin:         generatePin(),
 	}
 }
