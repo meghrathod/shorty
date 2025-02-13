@@ -8,10 +8,10 @@ RUN go mod tidy
 
 COPY . .
 
-RUN go build -o shorty main.go
+RUN go build meghrathod/shorty
 
 # Stage 2: GeoIP database setup and application image
-FROM debian:bookworm-slim
+FROM debian:bookworm
 
 WORKDIR /app
 
