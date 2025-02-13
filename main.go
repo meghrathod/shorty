@@ -4,7 +4,6 @@ import (
 	"cmp"
 	"database/sql"
 	"github.com/joho/godotenv"
-	_ "github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 	"log"
 	"net/http"
