@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Install software-properties-common, ca-certificates, gettext, and geoipupdate
-apt-get update && apt-get install -y --no-install-recommends software-properties-common ca-certificates gettext
+apt-get update && apt-get install -y --no-install-recommends software-properties-common ca-certificates gettext python3-launchpadlib gnupg
 
 # Add MaxMind PPA
 add-apt-repository -y ppa:maxmind/ppa
