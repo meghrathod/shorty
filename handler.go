@@ -3,7 +3,6 @@ package main
 import (
 	"database/sql"
 	"encoding/json"
-	"fmt"
 	"io"
 	"log"
 	"net/http"
@@ -41,7 +40,6 @@ func addToAnalytics(res *searchURLRequest, db *sql.DB, r *http.Request) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(res.IpAddress)
 	go func() {
 		ip, city, country, err := getIP(r)
 		if err != nil {

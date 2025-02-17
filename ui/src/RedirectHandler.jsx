@@ -7,31 +7,7 @@ const RedirectHandler = () => {
     const { shortUrl } = useParams();
     const navigate = useNavigate();
 
-    const ipData = {
-        YourFuckingIPAddress: 'a.b.c.d',
-        YourFuckingCity: 'New York, NY',
-        YourFuckingCountry: 'US',
-    }
-
-
-
     useEffect(() => {
-        const fetchIp = async () => {
-            try {
-                const response = await fetch('https://wtfismyip.com/json');
-                if (response.ok) {
-                    const data = await response.json();
-                    ipData.YourFuckingIPAddress = data.YourFuckingIPAddress;
-                    ipData.YourFuckingCity = data.YourFuckingCity;
-                    ipData.YourFuckingCountry = data.YourFuckingCountry;
-                    return data;
-                } else {
-                    return {};
-                }
-            } catch (error) {
-                return {};
-            }
-        }
 
         const fetchUrl = async () => {
             try {
@@ -44,10 +20,7 @@ const RedirectHandler = () => {
                         body: JSON.stringify({
                             "url": shortUrl,
                             accessTime: new Date(),
-                            userAgent: navigator.userAgent,
-                            ipAddress: ipData.YourFuckingIPAddress,
-                            location: ipData.YourFuckingCity,
-                            country: ipData.YourFuckingCountry,
+                            userAgent: navigator.userAgent
                         })
                     }
 
@@ -62,7 +35,7 @@ const RedirectHandler = () => {
                 navigate('/');
             }
         };
-        fetchIp().then(() => fetchUrl());
+        fetchUrl();
     }, [shortUrl, navigate]);
 
     return <LoaderPage message={"Redirecting..."}/>;

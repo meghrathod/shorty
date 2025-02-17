@@ -108,37 +108,6 @@ func checkURLValid(givenURL string) (bool, error) {
 	if err != nil {
 		return false, fmt.Errorf("invalid URL format: %v", err)
 	}
-
-	// Create an HTTP client with timeout
-	//client := &http.Client{
-	//	Timeout: 5 * time.Second,
-	//}
-
-	// Create a new request with a User-Agent to bypass bot restrictions
-	//req, err := http.NewRequest("GET", parsedURL.String(), nil)
-	//if err != nil {
-	//	return false, fmt.Errorf("error creating request: %v", err)
-	//}
-
-	// Mimic a browser to avoid LinkedIn's 999 error
-	//req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
-	//
-	//resp, err := client.Do(req)
-	//if err != nil {
-	//	return false, fmt.Errorf("error making GET request: %v", err)
-	//}
-	//defer func(Body io.ReadCloser) {
-	//	err := Body.Close()
-	//	if err != nil {
-	//		log.Fatal(err)
-	//	}
-	//}(resp.Body)
-	//
-	//// Check for HTTP errors
-	//if resp.StatusCode >= 400 {
-	//	return false, fmt.Errorf("URL returned status code %d", resp.StatusCode)
-	//}
-
 	return true, nil
 }
 
@@ -178,44 +147,33 @@ func enableCors(next http.HandlerFunc) http.HandlerFunc {
 
 func getIP(r *http.Request) (string, string, string, error) {
 	ips := r.Header.Get("X-Forwarded-For")
-	log.Println("X-Forwarded-For header:", ips)
 	splitIps := strings.Split(ips, ",")
 
 	var ip string
-	if len(splitIps) > 0 {
+	if len(splitIps) > 0 && ips != "" {
 		// Get the last IP in the list since ELB prepends other user-defined IPs, meaning the last one is the actual client IP.
 		ip = strings.TrimSpace(splitIps[len(splitIps)-1])
-		log.Println("Parsed IP from X-Forwarded-For:", ip)
 	} else {
 		ipHost, _, err := net.SplitHostPort(r.RemoteAddr)
 		if err != nil {
-			log.Println("Error splitting host and port:", err)
 			return "No IP", "Location not found", "Country not found", err
 		}
 		ip = ipHost
-		log.Println("Parsed IP from RemoteAddr:", ip)
 	}
 
 	netIP := net.ParseIP(ip)
 	if netIP == nil {
-		log.Println("Invalid IP address:", ip)
 		return "", "", "", fmt.Errorf("invalid IP address: %s", ip)
 	}
 
 	if netIP.IsLoopback() {
-		log.Println("Loopback IP detected:", ip)
 		return "127.0.0.1", "Loopback", "Home", nil
 	}
 
-	log.Println("IP Address:", ip)
-	log.Println("Loading GeoIP database")
-
 	city, country, err := useGeoIP(ip)
 	if err != nil {
-		log.Println("Error using GeoIP:", err)
 		return ip, "", "", err
 	}
-	log.Println("GeoIP result - City:", city, "Country:", country)
 	return ip, city, country, nil
 }
 
