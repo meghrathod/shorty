@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Install software-properties-common, ca-certificates, gettext, and geoipupdate
-apt-get update && apt-get install -y --no-install-recommends ca-certificates gettext wget  # Add wget here
+apt-get update && apt-get install -y --no-install-recommends ca-certificates gettext wget
 
 # Download geoipupdate .deb package (adjust version if needed)
 wget -qO geoipupdate.deb https://github.com/maxmind/geoipupdate/releases/download/v7.1.0/geoipupdate_7.1.0_linux_amd64.deb
@@ -12,10 +12,13 @@ apt-get install -y -f  # Important: Resolve dependencies
 rm geoipupdate.deb
 
 # Create GeoIP configuration file using a template and envsubst
-echo "AccountID $MAXMIND_ACCOUNT_ID" > /etc/GeoIP.conf.template
-echo "LicenseKey $MAXMIND_LICENSE_KEY" >> /etc/GeoIP.conf.template
-echo "EditionIDs GeoLite2-City" >> /etc/GeoIP.conf.template
-echo "DatabaseDirectory /usr/local/share/GeoIP" >> /etc/GeoIP.conf.template
+cat <<EOF > /etc/GeoIP.conf.template
+AccountID $MAXMIND_ACCOUNT_ID
+LicenseKey $MAXMIND_LICENSE_KEY
+EditionIDs GeoLite2-City
+DatabaseDirectory /usr/local/share/GeoIP
+EOF
+
 envsubst < /etc/GeoIP.conf.template > /etc/GeoIP.conf
 rm /etc/GeoIP.conf.template
 

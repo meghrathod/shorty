@@ -8,8 +8,8 @@ import (
 	"math/rand"
 	"net"
 	"net/http"
+	"net/url"
 	"os"
-	"regexp"
 	"strings"
 	"time"
 )
@@ -102,21 +102,44 @@ func generatePin() string {
 	return pin
 }
 
-func checkURLValid(url string) (bool, error) {
-	correctRegex := "[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)"
+func checkURLValid(givenURL string) (bool, error) {
+	// Parse URL to check if it's valid
+	_, err := url.ParseRequestURI(givenURL)
+	if err != nil {
+		return false, fmt.Errorf("invalid URL format: %v", err)
+	}
 
-	val, err := regexp.MatchString(correctRegex, url)
-	if err != nil {
-		return false, fmt.Errorf("error matching url: %v", err)
-	}
-	get, err := http.Get(url)
-	if err != nil {
-		return false, fmt.Errorf("error making get request: %v", err)
-	}
-	if get.StatusCode >= 400 {
-		return false, fmt.Errorf("url is not valid")
-	}
-	return val, nil
+	// Create an HTTP client with timeout
+	//client := &http.Client{
+	//	Timeout: 5 * time.Second,
+	//}
+
+	// Create a new request with a User-Agent to bypass bot restrictions
+	//req, err := http.NewRequest("GET", parsedURL.String(), nil)
+	//if err != nil {
+	//	return false, fmt.Errorf("error creating request: %v", err)
+	//}
+
+	// Mimic a browser to avoid LinkedIn's 999 error
+	//req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
+	//
+	//resp, err := client.Do(req)
+	//if err != nil {
+	//	return false, fmt.Errorf("error making GET request: %v", err)
+	//}
+	//defer func(Body io.ReadCloser) {
+	//	err := Body.Close()
+	//	if err != nil {
+	//		log.Fatal(err)
+	//	}
+	//}(resp.Body)
+	//
+	//// Check for HTTP errors
+	//if resp.StatusCode >= 400 {
+	//	return false, fmt.Errorf("URL returned status code %d", resp.StatusCode)
+	//}
+
+	return true, nil
 }
 
 func enableCors(next http.HandlerFunc) http.HandlerFunc {

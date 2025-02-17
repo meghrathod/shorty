@@ -15,6 +15,9 @@ FROM debian:bookworm
 
 WORKDIR /app
 
+# Copy the Go binary
+COPY --from=builder /app/shorty /app/shorty
+
 # Copy the setup script
 COPY geoip_setup.sh /app/
 
@@ -44,13 +47,9 @@ RUN chmod +x /app/geoip_setup.sh
 # Create the GeoIP database directory
 RUN mkdir -p /usr/local/share/GeoIP
 
-CMD ["/app/geoip_setup.sh"]
-# Copy the Go binary
-COPY --from=builder /app/shorty /app/shorty
+RUN /app/geoip_setup.sh
 
-# Install cron (and any other dependencies your app needs)
-RUN apt-get update && apt-get install -y --no-install-recommends cron ca-certificates \
-    && rm -rf /var/lib/apt/lists/*
+RUN ["geoipupdate", "-f", "/etc/GeoIP.conf"]
 
 # Add cron job (adjust the schedule as needed)
 RUN echo "0 0 * * 0 root geoipupdate -f /etc/GeoIP.conf" > /etc/cron.d/geoipupdate-cron && \
