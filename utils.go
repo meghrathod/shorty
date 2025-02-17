@@ -178,40 +178,45 @@ func enableCors(next http.HandlerFunc) http.HandlerFunc {
 
 func getIP(r *http.Request) (string, string, string, error) {
 	ips := r.Header.Get("X-Forwarded-For")
+	log.Println("X-Forwarded-For header:", ips)
 	splitIps := strings.Split(ips, ",")
 
-	ip := ""
-
+	var ip string
 	if len(splitIps) > 0 {
-		// get last IP in list since ELB prepends other user defined IPs, meaning the last one is the actual client IP.
-		netIP := net.ParseIP(splitIps[len(splitIps)-1])
-		if netIP == nil {
-			ipHost, _, err := net.SplitHostPort(r.RemoteAddr)
-			if err != nil {
-				return "No IP", "Location not found", "Country not found", err
-			}
-			ip = ipHost
+		// Get the last IP in the list since ELB prepends other user-defined IPs, meaning the last one is the actual client IP.
+		ip = strings.TrimSpace(splitIps[len(splitIps)-1])
+		log.Println("Parsed IP from X-Forwarded-For:", ip)
+	} else {
+		ipHost, _, err := net.SplitHostPort(r.RemoteAddr)
+		if err != nil {
+			log.Println("Error splitting host and port:", err)
+			return "No IP", "Location not found", "Country not found", err
 		}
+		ip = ipHost
+		log.Println("Parsed IP from RemoteAddr:", ip)
 	}
 
 	netIP := net.ParseIP(ip)
-	if netIP != nil {
-		ip := netIP.String()
-		if ip == "::1" {
-			return "127.0.0.1", "Loopback", "Home", nil
-		}
-		return ip, "Location not found", "Country not found", nil
+	if netIP == nil {
+		log.Println("Invalid IP address:", ip)
+		return "", "", "", fmt.Errorf("invalid IP address: %s", ip)
 	}
 
-	fmt.Println("IP Address: ", ip)
-	fmt.Println("Loading GeoIP database")
+	if netIP.IsLoopback() {
+		log.Println("Loopback IP detected:", ip)
+		return "127.0.0.1", "Loopback", "Home", nil
+	}
+
+	log.Println("IP Address:", ip)
+	log.Println("Loading GeoIP database")
 
 	city, country, err := useGeoIP(ip)
 	if err != nil {
+		log.Println("Error using GeoIP:", err)
 		return ip, "", "", err
 	}
+	log.Println("GeoIP result - City:", city, "Country:", country)
 	return ip, city, country, nil
-
 }
 
 func useGeoIP(ip string) (string, string, error) {
