@@ -8,7 +8,7 @@ RUN go mod tidy
 
 COPY . .
 
-RUN go build meghrathod/shorty
+RUN go build -o shorty meghrathod/shorty
 
 # Stage 2: GeoIP database setup and application image
 FROM debian:bookworm
@@ -18,8 +18,9 @@ WORKDIR /app
 # Copy the Go binary
 COPY --from=builder /app/shorty /app/shorty
 
-# Copy the setup script
+# Copy the setup script and start script
 COPY geoip_setup.sh /app/
+COPY start.sh /app/
 
 # Set environment variables (IMPORTANT: Set these during the build)
 ARG MAXMIND_ACCOUNT_ID
@@ -31,31 +32,28 @@ ARG DB_HOST
 ARG DB_PORT
 ARG DB_NAME
 ARG ALLOWED_ORIGINS
-ENV MAXMIND_ACCOUNT_ID $MAXMIND_ACCOUNT_ID
-ENV MAXMIND_LICENSE_KEY $MAXMIND_LICENSE_KEY
-ENV PORT $PORT
-ENV USERNAME $USERNAME
-ENV PASSWORD $PASSWORD
-ENV DB_HOST $DB_HOST
-ENV DB_PORT $DB_PORT
-ENV DB_NAME $DB_NAME
-ENV ALLOWED_ORIGINS $ALLOWED_ORIGINS
+ENV MAXMIND_ACCOUNT_ID=$MAXMIND_ACCOUNT_ID \
+    MAXMIND_LICENSE_KEY=$MAXMIND_LICENSE_KEY \
+    PORT=$PORT \
+    USERNAME=$USERNAME \
+    PASSWORD=$PASSWORD \
+    DB_HOST=$DB_HOST \
+    DB_PORT=$DB_PORT \
+    DB_NAME=$DB_NAME \
+    ALLOWED_ORIGINS=$ALLOWED_ORIGINS
 
-# Make the script executable
-RUN chmod +x /app/geoip_setup.sh
+# Install dependencies and run the setup script
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends ca-certificates gettext wget && \
+    chmod +x /app/geoip_setup.sh && \
+    mkdir -p /usr/local/share/GeoIP && \
+    /app/geoip_setup.sh && \
+    rm -rf /var/lib/apt/lists/*
 
-# Create the GeoIP database directory
-RUN mkdir -p /usr/local/share/GeoIP
+# Make the start script executable
+RUN chmod +x /app/start.sh
 
-RUN /app/geoip_setup.sh
-
-RUN ["geoipupdate", "-f", "/etc/GeoIP.conf"]
-
-# Add cron job (adjust the schedule as needed)
-RUN echo "0 0 * * 0 root geoipupdate -f /etc/GeoIP.conf" > /etc/cron.d/geoipupdate-cron && \
-    chmod 0644 /etc/cron.d/geoipupdate-cron
-
-# Start cron and the application
-CMD service cron start && /app/shorty
+# Start the application using the start script
+CMD /app/start.sh
 
 EXPOSE $PORT
