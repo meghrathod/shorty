@@ -271,6 +271,14 @@ func handleDeleteURL(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 		http.Error(w, "Error deleting from database", http.StatusInternalServerError)
 		return
 	}
+
+	stmt, err = db.Prepare("DELETE FROM analytics WHERE name = $1")
+	if err != nil {
+		http.Error(w, "Error deleting from database", http.StatusInternalServerError)
+		return
+	}
+	_, err = stmt.Exec(name)
+
 	w.WriteHeader(http.StatusOK)
 	return
 
