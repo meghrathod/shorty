@@ -203,6 +203,9 @@ func getIP(r *http.Request) (string, string, string, error) {
 		return ip, "Location not found", "Country not found", nil
 	}
 
+	fmt.Println("IP Address: ", ip)
+	fmt.Println("Loading GeoIP database")
+
 	city, country, err := useGeoIP(ip)
 	if err != nil {
 		return ip, "", "", err
@@ -221,6 +224,12 @@ func useGeoIP(ip string) (string, string, error) {
 
 	db, err := geoip2.Open(path)
 	if err != nil {
+		fmt.Println(err)
+	} else {
+		fmt.Println("Successfully opened GeoIP database")
+	}
+	if err != nil {
+		fmt.Println(err)
 		return "", "", err
 	}
 	defer func(db *geoip2.Reader) {
@@ -232,6 +241,7 @@ func useGeoIP(ip string) (string, string, error) {
 
 	city, err := db.City(net.ParseIP(ip))
 	if err != nil {
+		fmt.Println(err)
 		return "", "", err
 	}
 
