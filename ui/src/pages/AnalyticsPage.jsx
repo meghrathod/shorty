@@ -33,16 +33,16 @@ const AnalyticsPage = ({ analyticsData }) => {
                                 Short URL:{" "}
                                 <a
                                     href={window.location.origin + "/" + urlDetails.shortURL}
-                                    className="link link-primary"
+                                    className="link link-secondary"
                                 >
                                     {window.location.origin + "/" + urlDetails.shortURL}
                                 </a>
                             </p>
                             <p>
-                                Redirect URL:{" "}
+                                Redirect URL:
                                 <a
                                     href={urlDetails.url}
-                                    className="link link-secondary"
+                                    className="link link-primary font-bold text-justify max-w-full overflow-hidden text-ellipsis line-clamp-3 break-all"
                                 >
                                     {urlDetails.url}
                                 </a>

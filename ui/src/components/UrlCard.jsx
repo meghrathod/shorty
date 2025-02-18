@@ -43,16 +43,6 @@ const UrlCard = ({ urlObj, handleDelete, margin }) => {
                 </div>
                 <div className="flex flex-col items-center md:items-start md:ml-4">
                     <p className="text-sm text-center md:text-left">
-                        Original URL:{" "}
-                        <a
-                            href={urlObj.originalUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="link link-primary font-bold text-justify max-w-full overflow-hidden text-ellipsis line-clamp-3 break-all"
-                        >
-                            {urlObj.originalUrl}
-                        </a>
-                        <br />
                         Shortened:{" "}
                         <a
                             href={`${window.location.origin}/${urlObj.shortURL}`}
@@ -63,6 +53,15 @@ const UrlCard = ({ urlObj, handleDelete, margin }) => {
                             {`${window.location.origin}/${urlObj.shortURL}`}
                         </a>
                         <br />
+                        Original URL:{" "}
+                        <a
+                            href={urlObj.originalUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="link link-primary font-bold text-justify max-w-full overflow-hidden text-ellipsis line-clamp-3 break-all"
+                        >
+                            {urlObj.originalUrl}
+                        </a>
                         PIN: <span className="text-gray-500 font-bold">{urlObj.pin}</span>
                     </p>
                     <div className="card-actions mt-4 flex justify-center md:justify-start">
