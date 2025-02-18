@@ -1,4 +1,5 @@
 import React from "react";
+import { AnimatePresence, motion } from "framer-motion";
 
 const UrlInputForm = ({ url, setUrl, handleGenerate, handleDeleteClick, custom, setCustom, customKey, setCustomKey }) => {
     const handleKeyDown = (e) => {
@@ -35,23 +36,36 @@ const UrlInputForm = ({ url, setUrl, handleGenerate, handleDeleteClick, custom, 
                         </label>
                     </div>
                 </div>
-                {custom && (
-                    <input
-                        type="text"
-                        id="custom-key"
-                        placeholder="Enter custom keyword"
-                        className="input input-bordered rounded-box w-full mt-2"
-                        value={customKey}
-                        onChange={(e) => setCustomKey(e.target.value)}
-                    />
-                )}
-
-                <p className="label-text-alt text-gray-500 m-2 text-center">
-                    After generation, keep your PIN safe if you need to delete the URL in the future.
-                </p>
-                <p className="label-text-alt text-gray-500 m-2 text-center">
-                   Add <code className="bg-base-200 px-1 rounded text-pink-600">{`<shorty-keyword>`}</code> from <code className="bg-base-200 px-1 rounded text-pink-600">{window.location.origin}/{`<shorty-keyword>`}</code> for requesting URL deletion from our database.
-                </p>
+                <div className="relative">
+                    <AnimatePresence>
+                        {custom && (
+                            <motion.div
+                                initial={{ opacity: 0, height: 0 }}
+                                animate={{ opacity: 1, height: "auto" }}
+                                exit={{ opacity: 0, height: 0 }}
+                                transition={{ duration: 0.3 }}
+                                className="absolute w-full"
+                            >
+                                <input
+                                    type="text"
+                                    id="custom-key"
+                                    placeholder="Enter custom keyword"
+                                    className="input input-bordered rounded-box w-full mt-2"
+                                    value={customKey}
+                                    onChange={(e) => setCustomKey(e.target.value)}
+                                />
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+                </div>
+                <div className="mt-14">
+                    <p className="label-text-alt text-gray-500 m-2 text-center">
+                        After generation, keep your PIN safe if you need to delete the URL in the future.
+                    </p>
+                    <p className="label-text-alt text-gray-500 m-2 text-center">
+                        Add <code className="bg-base-200 px-1 rounded text-pink-600">{`<shorty-keyword>`}</code> from <code className="bg-base-200 px-1 rounded text-pink-600">{window.location.origin}/{`<shorty-keyword>`}</code> for requesting URL deletion from our database.
+                    </p>
+                </div>
             </div>
             <div className="flex justify-center gap-4 mt-4">
                 <button
