@@ -26,6 +26,12 @@ type shortURLResponse struct {
 	LongURL  string `json:"url"`
 }
 
+type newURLRequest struct {
+	Url       string `json:"url"`
+	Custom    bool   `json:"custom"`
+	CustomKey string `json:"customKey"`
+}
+
 type searchURLRequest struct {
 	ShortURL   string    `json:"url"`
 	AccessTime time.Time `json:"accessTime"`
@@ -56,12 +62,44 @@ func initDB() *sql.DB {
 	return db
 }
 
-func createURL(url string, db *sql.DB) shortURL {
-	return shortURL{
-		ShortURL:    generateKey(db),
-		Url:         url,
-		DateCreated: time.Now().UTC(),
-		Pin:         generatePin(),
+func createURL(url string, db *sql.DB, custom bool, customKey string) (shortURL, error) {
+	if custom {
+		return shortURL{
+			ShortURL:    generateKey(db),
+			Url:         url,
+			DateCreated: time.Now().UTC(),
+			Pin:         generatePin(),
+		}, nil
+	} else {
+		customKey, err := generateCustomKey(db, customKey)
+		if err != nil {
+			return shortURL{}, err
+		}
+		return shortURL{
+			ShortURL:    customKey,
+			Url:         url,
+			DateCreated: time.Now().UTC(),
+			Pin:         generatePin(),
+		}, nil
+
+	}
+}
+
+func generateCustomKey(db *sql.DB, customKey string) (string, error) {
+	stmt, err := db.Prepare("SELECT count(name) FROM urls where name = $1")
+	if err != nil {
+		log.Fatal(err)
+	}
+	row := stmt.QueryRow(customKey)
+	var count int
+	err = row.Scan(&count)
+	if err != nil {
+		log.Fatal(err)
+	}
+	if count == 0 {
+		return customKey, nil
+	} else {
+		return "", fmt.Errorf("custom key already exists")
 	}
 }
 

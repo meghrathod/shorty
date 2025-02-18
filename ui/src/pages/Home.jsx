@@ -8,6 +8,8 @@ import { useNavigate } from 'react-router-dom';
 
 function Home({ setPin }) {
     const [url, setUrl] = useState("");
+    const [custom, setCustom] = useState(false);
+    const [customKey, setCustomKey] = useState("");
     const [urls, setUrls] = useState([]);
     const [alert, setAlert] = useState({ show: false, message: "", variant: "" });
     const [deleteModal, setDeleteModal] = useState(false);
@@ -72,10 +74,14 @@ function Home({ setPin }) {
                 url={url}
                 setUrl={setUrl}
                 handleGenerate={() =>
-                    handleGenerate(url, setUrl, urls, setUrls, setAlert)
+                    handleGenerate(url, setUrl, urls, setUrls, setAlert, custom, customKey, setCustomKey)
                 }
                 handleDeleteClick={handleDeleteClick}
                 handleAnalyticsClick={handleAnalyticsClick}
+                custom={custom}
+                setCustom={setCustom}
+                customKey={customKey}
+                setCustomKey={setCustomKey}
             />
 
             <UrlList

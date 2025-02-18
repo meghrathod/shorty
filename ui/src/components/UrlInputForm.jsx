@@ -1,6 +1,6 @@
 import React from "react";
 
-const UrlInputForm = ({ url, setUrl, handleGenerate, handleDeleteClick }) => {
+const UrlInputForm = ({ url, setUrl, handleGenerate, handleDeleteClick, custom, setCustom, customKey, setCustomKey }) => {
     const handleKeyDown = (e) => {
         if (e.key === "Enter") {
             e.preventDefault();
@@ -11,15 +11,41 @@ const UrlInputForm = ({ url, setUrl, handleGenerate, handleDeleteClick }) => {
     return (
         <div className="w-full max-w-2xl mb-8">
             <div className="form-control w-full">
-                <input
-                    type="url"
-                    placeholder="Enter URL to shorten or <shorty-keyword> for deletion"
-                    className="input input-bordered w-full"
-                    value={url}
-                    onChange={(e) => setUrl(e.target.value)}
-                    onKeyDown={handleKeyDown}
-                    autoFocus
-                />
+                <div className="flex flex-row items-center">
+                    <div className="relative w-full">
+                        <input
+                            type="url"
+                            id="url"
+                            placeholder="Enter URL to shorten or <shorty-keyword> for deletion"
+                            className="input input-bordered rounded-box w-full pr-16"
+                            value={url}
+                            onChange={(e) => setUrl(e.target.value)}
+                            onKeyDown={handleKeyDown}
+                            autoFocus
+                        />
+                        <label className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer bg-base-200 bg-clip-padding pl-2 backdrop-blur-sm border border-gray-300 rounded-r-box">
+                            <span className="label-text mr-2 text-gray-500">Custom key</span>
+                            <input
+                                type="checkbox"
+                                id="custom"
+                                className="toggle toggle-primary"
+                                defaultChecked={false}
+                                onChange={(e) => setCustom(e.target.checked)}
+                            />
+                        </label>
+                    </div>
+                </div>
+                {custom && (
+                    <input
+                        type="text"
+                        id="custom-key"
+                        placeholder="Enter custom keyword"
+                        className="input input-bordered rounded-box w-full mt-2"
+                        value={customKey}
+                        onChange={(e) => setCustomKey(e.target.value)}
+                    />
+                )}
+
                 <p className="label-text-alt text-gray-500 m-2 text-center">
                     After generation, keep your PIN safe if you need to delete the URL in the future.
                 </p>
