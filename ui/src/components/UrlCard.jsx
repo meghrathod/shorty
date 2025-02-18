@@ -8,7 +8,7 @@ const UrlCard = ({ urlObj, handleDelete, margin }) => {
         if (navigator.share) {
             navigator.share({
                 title: 'Shortened URL',
-                text: `Check out this shortened URL: ${window.location.origin}/${urlObj.shortURL}`,
+                text: `Hey there! Check this out: ${window.location.origin}/${urlObj.shortURL}`,
                 url: `${window.location.origin}/${urlObj.shortURL}`,
             }).catch((error) => console.error('Error sharing', error));
         } else {
