@@ -1,5 +1,5 @@
 import React from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion } from "motion/react";
 
 const UrlInputForm = ({ url, setUrl, handleGenerate, handleDeleteClick, custom, setCustom, customKey, setCustomKey }) => {
     const handleKeyDown = (e) => {
@@ -18,14 +18,14 @@ const UrlInputForm = ({ url, setUrl, handleGenerate, handleDeleteClick, custom, 
                             type="url"
                             id="url"
                             placeholder="Enter URL to shorten or <shorty-keyword> for deletion"
-                            className="input input-bordered rounded-box w-full pr-16"
+                            className="input input-bordered border-gray-400 rounded-box w-full pr-16"
                             value={url}
                             onChange={(e) => setUrl(e.target.value)}
                             onKeyDown={handleKeyDown}
                             autoFocus
                         />
-                        <label className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer bg-base-200 bg-clip-padding pl-2 backdrop-blur-sm border border-gray-300 rounded-r-box">
-                            <span className="label-text mr-2 text-gray-500">Custom key</span>
+                        <label className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer bg-base-200 bg-clip-padding pl-2 backdrop-blur-sm border border-gray-400 rounded-r-box">
+                            <span className="label-text mr-2 text-gray-500">Custom</span>
                             <input
                                 type="checkbox"
                                 id="custom"
@@ -50,7 +50,7 @@ const UrlInputForm = ({ url, setUrl, handleGenerate, handleDeleteClick, custom, 
                                     type="text"
                                     id="custom-key"
                                     placeholder="Enter custom keyword"
-                                    className="input input-bordered rounded-box w-full mt-2"
+                                    className="input input-bordered border-gray-400 rounded-box w-full mt-2"
                                     value={customKey}
                                     onChange={(e) => setCustomKey(e.target.value)}
                                 />

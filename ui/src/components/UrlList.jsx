@@ -5,7 +5,7 @@ const UrlList = ({ urls, handleDelete }) => {
     if (urls.length === 0) return null;
 
     return (
-        <div className="w-full max-w-3xl p-4 border border-base-300 rounded-lg overflow-y-auto max-h-[400px]">
+        <div className="w-full max-w-3xl p-4 border border-gray-400 rounded-lg overflow-y-auto max-h-[400px]">
             <div className="space-y-4">
                 {urls.map((urlObj, index) => (
                     <UrlCard
