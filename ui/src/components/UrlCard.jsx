@@ -48,7 +48,7 @@ const UrlCard = ({ urlObj, handleDelete, margin }) => {
                             href={urlObj.originalUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="link link-primary font-bold text-justify max-w-xs overflow-ellipsis"
+                            className="link link-primary font-bold text-justify max-w-full overflow-hidden text-ellipsis line-clamp-3 break-all"
                         >
                             {urlObj.originalUrl}
                         </a>
