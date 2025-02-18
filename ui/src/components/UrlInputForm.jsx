@@ -29,7 +29,7 @@ const UrlInputForm = ({ url, setUrl, handleGenerate, handleDeleteClick, custom, 
                                 type="checkbox"
                                 id="custom"
                                 className="toggle toggle-primary"
-                                defaultChecked={false}
+                                checked={custom}
                                 onChange={(e) => setCustom(e.target.checked)}
                             />
                         </label>

@@ -19,7 +19,7 @@ export const handleGenerate = async (url, setUrl, urls, setUrls, setAlert, custo
         },
         body: JSON.stringify({
             url: url,
-            ...(custom && {customKey: customKey})
+            ...(custom && {customKey: customKey, custom: true}),
         })
     });
 

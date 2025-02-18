@@ -63,7 +63,7 @@ func initDB() *sql.DB {
 }
 
 func createURL(url string, db *sql.DB, custom bool, customKey string) (shortURL, error) {
-	if custom {
+	if !custom {
 		return shortURL{
 			ShortURL:    generateKey(db),
 			Url:         url,
