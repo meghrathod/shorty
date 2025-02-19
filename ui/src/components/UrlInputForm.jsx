@@ -18,7 +18,7 @@ const UrlInputForm = ({ url, setUrl, handleGenerate, handleDeleteClick, custom, 
                             type="url"
                             id="url"
                             placeholder="Enter URL to shorten or <shorty-keyword> for deletion"
-                            className="input input-bordered border-gray-400 rounded-box w-full pr-16 focus:outline-none"
+                            className="input input-bordered focus:[box-shadow:none] border-gray-400 rounded-box w-full pr-16 focus:outline-none"
                             value={url}
                             onChange={(e) => setUrl(e.target.value)}
                             onKeyDown={handleKeyDown}
@@ -45,19 +45,21 @@ const UrlInputForm = ({ url, setUrl, handleGenerate, handleDeleteClick, custom, 
                                 animate={{ opacity: 1, height: "auto" }}
                                 exit={{ opacity: 0, height: 0 }}
                                 transition={{ duration: 0.3 }}
-                                className="flex items-center w-full"
+                                className="absolute w-full"
                             >
-                                <label className="flex items-center h-10 py-2 pl-3 pr-2 bg-base-200 bg-clip-padding backdrop-blur-sm border border-gray-400 rounded-l-box">
-                                    <span className="label-text text-gray-500">{window.location.origin}/</span>
-                                </label>
-                                <input
-                                    type="text"
-                                    id="custom-key"
-                                    placeholder="keyword"
-                                    className="border-gray-400 h-10 rounded-r-box border-l-0 w-full p-2 focus:outline-none"
-                                    value={customKey}
-                                    onChange={(e) => setCustomKey(e.target.value)}
-                                />
+                                <div className="flex items-center w-full">
+                                    <label className="flex items-center h-10 py-2 pl-3 pr-2 bg-base-200 bg-clip-padding backdrop-blur-sm border border-gray-400 rounded-tl-md rounded-bl-md">
+                                        <span className="label-text text-gray-500">{window.location.origin}/</span>
+                                    </label>
+                                    <input
+                                        type="text"
+                                        id="custom-key"
+                                        placeholder="keyword"
+                                        className="border-gray-400 h-10 rounded-tr-md rounded-br-md border-l-0 w-full p-2 focus:outline-none"
+                                        value={customKey}
+                                        onChange={(e) => setCustomKey(e.target.value)}
+                                    />
+                                </div>
                             </motion.div>
                         )}
                     </AnimatePresence>
