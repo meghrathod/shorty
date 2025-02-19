@@ -1,5 +1,3 @@
-import React from "react";
-
 const PinModal = ({ show, handleClose, url, pin, setPin, handleConfirmDelete }) => {
     if (!show) return null;
 

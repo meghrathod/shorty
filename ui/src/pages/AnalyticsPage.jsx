@@ -1,4 +1,3 @@
-import React from 'react';
 import { QrCode } from 'react-qrcode-pretty';
 
 const AnalyticsPage = ({ analyticsData }) => {

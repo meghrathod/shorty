@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { QrCode } from 'react-qrcode-pretty';
 
 const UrlCard = ({ urlObj, handleDelete, margin }) => {

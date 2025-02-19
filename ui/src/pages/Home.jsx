@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import AlertComponent from "../components/Alert.jsx";
 import UrlInputForm from "../components/UrlInputForm.jsx";
 import UrlList from "../components/UrlList.jsx";

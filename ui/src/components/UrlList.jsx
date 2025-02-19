@@ -1,4 +1,3 @@
-import React from 'react';
 import UrlCard from './UrlCard.jsx';
 
 const UrlList = ({ urls, handleDelete }) => {
