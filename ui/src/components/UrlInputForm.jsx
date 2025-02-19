@@ -53,7 +53,7 @@ const UrlInputForm = ({ url, setUrl, handleGenerate, handleDeleteClick, custom, 
                                 <input
                                     type="text"
                                     id="custom-key"
-                                    placeholder="Enter shorty keyword"
+                                    placeholder="keyword"
                                     className="border-gray-400 h-10 rounded-r-box border-l-0 w-full p-2 focus:outline-none"
                                     value={customKey}
                                     onChange={(e) => setCustomKey(e.target.value)}
