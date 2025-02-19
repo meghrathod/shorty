@@ -13,18 +13,18 @@ const UrlInputForm = ({ url, setUrl, handleGenerate, handleDeleteClick, custom, 
         <div className="w-full max-w-2xl mb-8">
             <div className="form-control w-full">
                 <div className="flex flex-row items-center">
-                    <div className="relative w-full">
+                    <div className="relative w-full shadow-lg rounded-box">
                         <input
                             type="url"
                             id="url"
                             placeholder="Enter URL to shorten or <shorty-keyword> for deletion"
-                            className="input input-bordered focus:[box-shadow:none] border-gray-400 rounded-box w-full pr-16 focus:outline-none"
+                            className="input input-bordered h-10 focus:[box-shadow:none] border-gray-400 rounded-box w-full pr-16 focus:outline-none"
                             value={url}
                             onChange={(e) => setUrl(e.target.value)}
                             onKeyDown={handleKeyDown}
                             autoFocus
                         />
-                        <label className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer bg-base-200 bg-clip-padding pl-2 backdrop-blur-sm border border-gray-400 rounded-r-box">
+                        <label className="absolute inset-y-0 h-10 right-0 flex items-center pr-3 cursor-pointer bg-base-200 bg-clip-padding pl-2 backdrop-blur-sm border border-gray-400 rounded-r-box">
                             <span className="label-text mr-2 text-gray-500">Custom</span>
                             <input
                                 type="checkbox"
@@ -47,7 +47,7 @@ const UrlInputForm = ({ url, setUrl, handleGenerate, handleDeleteClick, custom, 
                                 transition={{ duration: 0.3 }}
                                 className="absolute w-full"
                             >
-                                <div className="flex items-center w-full">
+                                <div className="flex items-center w-full shadow-lg rounded-box">
                                     <label className="flex items-center h-10 py-2 pl-3 pr-2 bg-base-200 bg-clip-padding backdrop-blur-sm border border-gray-400 rounded-tl-md rounded-bl-md">
                                         <span className="label-text text-gray-500">{window.location.origin}/</span>
                                     </label>
