@@ -76,13 +76,13 @@ const UrlInputForm = ({ url, setUrl, handleGenerate, handleDeleteClick, custom, 
             </div>
             <div className="flex justify-center gap-4 mt-4">
                 <button
-                    className="btn btn-primary"
+                    className="btn btn-primary shadow-lg"
                     onClick={handleGenerate}
                 >
                     Generate
                 </button>
                 <button
-                    className="btn btn-error"
+                    className="btn btn-error shadow-lg"
                     onClick={() => handleDeleteClick(url)}
                 >
                     Delete
