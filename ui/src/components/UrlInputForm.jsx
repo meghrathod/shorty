@@ -82,7 +82,9 @@ const UrlInputForm = ({
           </p>
           <p className="label-text-alt text-gray-500 m-2 text-center">
             Add{" "}
-            <code className="bg-base-200 px-1 rounded text-pink-600">{"<shorty-keyword>"}</code>{" "}
+            <code className="bg-base-200 px-1 rounded text-pink-600">
+              {"<shorty-keyword>"}
+            </code>{" "}
             from{" "}
             <code className="bg-base-200 px-1 rounded text-pink-600">
               {window.location.origin}/{"<shorty-keyword>"}
