@@ -44,7 +44,7 @@ const UrlCard = ({ urlObj, handleDelete, margin }) => {
             padding={10}
             size={150}
             bgColor="transparent"
-            bgRounded={true}
+            bgRounded
             divider
           />
         </div>
@@ -170,7 +170,7 @@ const UrlCard = ({ urlObj, handleDelete, margin }) => {
                 padding={10}
                 size={300}
                 bgColor="transparent"
-                bgRounded={true}
+                bgRounded
                 divider
               />
             </div>

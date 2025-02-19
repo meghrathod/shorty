@@ -27,7 +27,7 @@ const AnalyticsPage = ({ analyticsData }) => {
                 padding={10}
                 size={window.innerWidth > 768 ? 150 : 80}
                 bgColor="transparent"
-                bgRounded={true}
+                bgRounded
                 divider
               />
             </div>
