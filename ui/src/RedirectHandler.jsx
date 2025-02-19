@@ -1,44 +1,42 @@
-import React, {useEffect} from 'react';
-import {useNavigate, useParams} from 'react-router-dom';
+import React, { useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import LoaderPage from "./pages/LoaderPage.jsx";
 
-
 const RedirectHandler = () => {
-    const { shortUrl } = useParams();
-    const navigate = useNavigate();
+  const { shortUrl } = useParams();
+  const navigate = useNavigate();
 
-    useEffect(() => {
+  useEffect(() => {
+    const fetchUrl = async () => {
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_SERVER_DOMAIN}/${shortUrl}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              url: shortUrl,
+              accessTime: new Date(),
+              userAgent: navigator.userAgent,
+            }),
+          },
+        );
+        if (response.ok) {
+          const data = await response.json();
+          window.location.href = data.url;
+        } else {
+          navigate("/404");
+        }
+      } catch (error) {
+        navigate("/");
+      }
+    };
+    fetchUrl();
+  }, [shortUrl, navigate]);
 
-        const fetchUrl = async () => {
-            try {
-                const response = await fetch(`${import.meta.env.VITE_SERVER_DOMAIN}/${shortUrl}`,
-                    {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            "url": shortUrl,
-                            accessTime: new Date(),
-                            userAgent: navigator.userAgent
-                        })
-                    }
-
-                );
-                if (response.ok) {
-                    const data = await response.json();
-                    window.location.href = data.url;
-                } else {
-                    navigate('/404');
-                }
-            } catch (error) {
-                navigate('/');
-            }
-        };
-        fetchUrl();
-    }, [shortUrl, navigate]);
-
-    return <LoaderPage message={"Redirecting..."}/>;
+  return <LoaderPage message={"Redirecting..."} />;
 };
 
 export default RedirectHandler;

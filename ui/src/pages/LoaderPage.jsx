@@ -1,13 +1,13 @@
-import React from 'react';
+import React from "react";
 
 const LoaderPage = ({ message }) => {
-    return (
-        <div className="min-h-screen flex flex-col items-center justify-center bg-base-100">
-            {/* Loader wheel */}
-            <div className="loading loading-ring loading-lg" ></div>
-            <h1 className="text-lg mt-4">{message}</h1>
-        </div>
-    );
+  return (
+    <div className="min-h-screen flex flex-col items-center justify-center bg-base-100">
+      {/* Loader wheel */}
+      <div className="loading loading-ring loading-lg"></div>
+      <h1 className="text-lg mt-4">{message}</h1>
+    </div>
+  );
 };
 
 export default LoaderPage;
