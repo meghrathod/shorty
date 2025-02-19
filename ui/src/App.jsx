@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { useState } from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import RedirectHandler from "./RedirectHandler.jsx";
 import Home from "./pages/Home.jsx";
 import NotFoundPage from "./pages/404.jsx";
@@ -9,22 +9,25 @@ import LoaderPage from "./pages/LoaderPage.jsx";
 import ThemeSwitcher from "./components/ThemeSwitcher.jsx";
 
 const App = () => {
-    const [pin, setPin] = useState(""); // Store the PIN
+  const [pin, setPin] = useState(""); // Store the PIN
 
-    return (
-        <div>
-            <ThemeSwitcher />
-            <Router>
-                <Routes>
-                    <Route path="/" element={<Home setPin={setPin} />} />
-                    <Route path="/analytics" element={<ProtectedRoute element={AnalyticsPage} pin={pin} />} />
-                    <Route path="/404" element={<NotFoundPage />} />
-                    <Route path="/:shortUrl" element={<RedirectHandler />} />
-                    <Route path="/loader" element={<LoaderPage message={"Loading"} />} />
-                </Routes>
-            </Router>
-        </div>
-    );
+  return (
+    <div>
+      <ThemeSwitcher />
+      <Router>
+        <Routes>
+          <Route path="/" element={<Home setPin={setPin} />} />
+          <Route
+            path="/analytics"
+            element={<ProtectedRoute element={AnalyticsPage} pin={pin} />}
+          />
+          <Route path="/404" element={<NotFoundPage />} />
+          <Route path="/:shortUrl" element={<RedirectHandler />} />
+          <Route path="/loader" element={<LoaderPage message={"Loading"} />} />
+        </Routes>
+      </Router>
+    </div>
+  );
 };
 
 export default App;
