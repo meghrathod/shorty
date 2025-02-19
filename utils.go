@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"regexp"
 	"strings"
 	"time"
 )
@@ -141,28 +142,58 @@ func generatePin() string {
 }
 
 func checkURLValid(givenURL string) (bool, error) {
-	// Parse URL to check if it's valid
-	_, err := url.ParseRequestURI(givenURL)
+	correctRegex := "[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)"
+
+	val, err := regexp.MatchString(correctRegex, givenURL)
 	if err != nil {
-		return false, fmt.Errorf("invalid URL format: %v", err)
+		return false, fmt.Errorf("error while checking URL validity: %v", err)
+	}
+	if !val {
+		return false, fmt.Errorf("invalid URL")
+	}
+
+	// Parse URL to check if it's valid
+	_, err = url.ParseRequestURI(givenURL)
+	if err != nil {
+		return false, fmt.Errorf("invalid URL: %v", err)
 	}
 	return true, nil
 }
 
 func enableCors(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		// Get allowed origin from environment variable
+		// Define allowed origins based on environment
+		var allowedOrigins []string
 		allowedOrigin := os.Getenv("ALLOWED_ORIGIN")
-		if allowedOrigin == "" {
-			allowedOrigin = "http://localhost:5173"
+		if allowedOrigin != "" {
+			allowedOrigins = strings.Split(allowedOrigin, ",")
+		} else {
+			switch os.Getenv("APP_ENV") {
+			case "production":
+				allowedOrigins = []string{"https://sh.meghrathod.dev"}
+			case "development":
+				allowedOrigins = []string{"https://sh-dev.meghrathod.dev", "http://localhost:5173"}
+			default:
+				allowedOrigins = []string{"http://localhost:5173"}
+			}
 		}
 
-		//Dynamically match the request's Origin with the configured allowed origin
+		// Get the request's origin
 		origin := r.Header.Get("Origin")
-		if origin == allowedOrigin {
-			w.Header().Set("Access-Control-Allow-Origin", "*")
+
+		// Check if the origin is in the allowed origins list
+		originAllowed := false
+		for _, allowedOrigin := range allowedOrigins {
+			if origin == allowedOrigin {
+				originAllowed = true
+				break
+			}
+		}
+
+		if originAllowed {
+			w.Header().Set("Access-Control-Allow-Origin", origin)
 		} else {
-			// If CORS origin doesn't match allowedOrigin, reject the request
+			// If CORS origin doesn't match allowed origins, reject the request
 			http.Error(w, "CORS policy: Origin not allowed", http.StatusForbidden)
 			return
 		}
@@ -173,7 +204,6 @@ func enableCors(next http.HandlerFunc) http.HandlerFunc {
 
 		// Handle preflight OPTIONS requests
 		if r.Method == http.MethodOptions {
-			// Preflight requests need to respond early with headers and status 204
 			w.WriteHeader(http.StatusNoContent)
 			return
 		}
