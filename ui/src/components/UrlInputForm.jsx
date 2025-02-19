@@ -18,7 +18,7 @@ const UrlInputForm = ({ url, setUrl, handleGenerate, handleDeleteClick, custom, 
                             type="url"
                             id="url"
                             placeholder="Enter URL to shorten or <shorty-keyword> for deletion"
-                            className="input input-bordered border-gray-400 rounded-box w-full pr-16"
+                            className="input input-bordered border-gray-400 rounded-box w-full pr-16 focus:outline-none"
                             value={url}
                             onChange={(e) => setUrl(e.target.value)}
                             onKeyDown={handleKeyDown}
@@ -36,7 +36,8 @@ const UrlInputForm = ({ url, setUrl, handleGenerate, handleDeleteClick, custom, 
                         </label>
                     </div>
                 </div>
-                <div className="relative">
+
+                <div className="relative mt-2">
                     <AnimatePresence>
                         {custom && (
                             <motion.div
@@ -44,13 +45,16 @@ const UrlInputForm = ({ url, setUrl, handleGenerate, handleDeleteClick, custom, 
                                 animate={{ opacity: 1, height: "auto" }}
                                 exit={{ opacity: 0, height: 0 }}
                                 transition={{ duration: 0.3 }}
-                                className="absolute w-full"
+                                className="flex items-center w-full"
                             >
+                                <label className="flex items-center h-10 py-2 pl-3 pr-2 bg-base-200 bg-clip-padding backdrop-blur-sm border border-gray-400 rounded-l-box">
+                                    <span className="label-text text-gray-500">{window.location.origin}/</span>
+                                </label>
                                 <input
                                     type="text"
                                     id="custom-key"
-                                    placeholder="Enter custom keyword"
-                                    className="input input-bordered border-gray-400 rounded-box w-full mt-2"
+                                    placeholder="Enter shorty keyword"
+                                    className="border-gray-400 h-10 rounded-r-box border-l-0 w-full p-2 focus:outline-none"
                                     value={customKey}
                                     onChange={(e) => setCustomKey(e.target.value)}
                                 />
@@ -58,6 +62,7 @@ const UrlInputForm = ({ url, setUrl, handleGenerate, handleDeleteClick, custom, 
                         )}
                     </AnimatePresence>
                 </div>
+
                 <div className="mt-14">
                     <p className="label-text-alt text-gray-500 m-2 text-center">
                         After generation, keep your PIN safe if you need to delete the URL in the future.
