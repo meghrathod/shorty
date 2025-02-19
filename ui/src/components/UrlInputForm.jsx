@@ -31,7 +31,6 @@ const UrlInputForm = ({
               value={url}
               onChange={(e) => setUrl(e.target.value)}
               onKeyDown={handleKeyDown}
-              
             />
             <label className="absolute inset-y-0 h-10 right-0 flex items-center pr-3 cursor-pointer bg-base-200 bg-clip-padding pl-2 backdrop-blur-sm border border-gray-400 rounded-r-box">
               <span className="label-text mr-2 text-gray-500">Custom</span>
@@ -83,7 +82,9 @@ const UrlInputForm = ({
           </p>
           <p className="label-text-alt text-gray-500 m-2 text-center">
             Add{" "}
-            <code className="bg-base-200 px-1 rounded text-pink-600">{"<shorty-keyword>"}</code>{" "}
+            <code className="bg-base-200 px-1 rounded text-pink-600">
+              {"<shorty-keyword>"}
+            </code>{" "}
             from{" "}
             <code className="bg-base-200 px-1 rounded text-pink-600">
               {window.location.origin}/{"<shorty-keyword>"}
