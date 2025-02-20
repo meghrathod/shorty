@@ -4,7 +4,7 @@ import UrlInputForm from "../components/UrlInputForm.jsx";
 import UrlList from "../components/UrlList.jsx";
 import PinModal from "../components/PinModal.jsx";
 import { handleGenerate, handleDelete, showTemporaryAlert } from "../handlers";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 function Home() {
   const [url, setUrl] = useState("");
@@ -26,7 +26,11 @@ function Home() {
 
   const handleDeleteClick = useCallback((url) => {
     if (!url) {
-      showTemporaryAlert('Please enter a URL for deletion.', 'warning', setAlert);
+      showTemporaryAlert(
+        "Please enter a URL for deletion.",
+        "warning",
+        setAlert,
+      );
       return;
     }
     setDeleteUrl(url);
@@ -35,7 +39,11 @@ function Home() {
 
   const handleAnalyticsClick = useCallback((url) => {
     if (!url) {
-      showTemporaryAlert('Please enter a URL for analytics.', 'warning', setAlert);
+      showTemporaryAlert(
+        "Please enter a URL for analytics.",
+        "warning",
+        setAlert,
+      );
       return;
     }
     setDeleteUrl(url);
@@ -47,7 +55,9 @@ function Home() {
   }, []);
 
   const handleConfirmDelete = useCallback(() => {
-    handleDelete(deleteUrl, pin, urls, setUrls, setAlert).then(handleCloseModal);
+    handleDelete(deleteUrl, pin, urls, setUrls, setAlert).then(
+      handleCloseModal,
+    );
   }, [deleteUrl, pin, urls, setUrls, setAlert, handleCloseModal]);
 
   const handleRemoveUrl = useCallback((shortURL) => {
@@ -55,45 +65,54 @@ function Home() {
   }, []);
 
   return (
-      <div className="min-h-screen flex flex-col items-center justify-center p-4">
-        <AlertComponent
-            alert={alert}
-            onClose={() => setAlert({ show: false, message: "", variant: "" })}
-        />
+    <div className="min-h-screen flex flex-col items-center justify-center p-4">
+      <AlertComponent
+        alert={alert}
+        onClose={() => setAlert({ show: false, message: "", variant: "" })}
+      />
 
-        <h1 className="text-4xl font-bold mb-8 text-center">Shorty ✄</h1>
+      <h1 className="text-4xl font-bold mb-8 text-center">Shorty ✄</h1>
 
-        <UrlInputForm
-            url={url}
-            setUrl={setUrl}
-            handleGenerate={() =>
-                handleGenerate(url, setUrl, urls, setUrls, setAlert, custom, customKey, setCustomKey)
-            }
-            handleDeleteClick={handleDeleteClick}
-            handleAnalyticsClick={handleAnalyticsClick}
-            custom={custom}
-            setCustom={setCustom}
-            customKey={customKey}
-            setCustomKey={setCustomKey}
-        />
+      <UrlInputForm
+        url={url}
+        setUrl={setUrl}
+        handleGenerate={() =>
+          handleGenerate(
+            url,
+            setUrl,
+            urls,
+            setUrls,
+            setAlert,
+            custom,
+            customKey,
+            setCustomKey,
+          )
+        }
+        handleDeleteClick={handleDeleteClick}
+        handleAnalyticsClick={handleAnalyticsClick}
+        custom={custom}
+        setCustom={setCustom}
+        customKey={customKey}
+        setCustomKey={setCustomKey}
+      />
 
-        <UrlList
-            urls={urls.filter(urlObj => !removedUrls.includes(urlObj.shortURL))}
-            handleDelete={(shortURL, pin) =>
-                handleDelete(shortURL, pin, urls, setUrls, setAlert)
-            }
-            handleRemoveUrl={handleRemoveUrl}
-        />
+      <UrlList
+        urls={urls.filter((urlObj) => !removedUrls.includes(urlObj.shortURL))}
+        handleDelete={(shortURL, pin) =>
+          handleDelete(shortURL, pin, urls, setUrls, setAlert)
+        }
+        handleRemoveUrl={handleRemoveUrl}
+      />
 
-        <PinModal
-            show={deleteModal}
-            handleClose={handleCloseModal}
-            url={deleteUrl}
-            pin={pin}
-            setPin={setLocalPin}
-            handleConfirmDelete={handleConfirmDelete}
-        />
-      </div>
+      <PinModal
+        show={deleteModal}
+        handleClose={handleCloseModal}
+        url={deleteUrl}
+        pin={pin}
+        setPin={setLocalPin}
+        handleConfirmDelete={handleConfirmDelete}
+      />
+    </div>
   );
 }
 
