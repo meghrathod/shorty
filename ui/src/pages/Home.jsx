@@ -4,7 +4,7 @@ import UrlInputForm from "../components/UrlInputForm.jsx";
 import UrlList from "../components/UrlList.jsx";
 import PinModal from "../components/PinModal.jsx";
 import { handleGenerate, handleDelete, showTemporaryAlert } from "../handlers";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 function Home() {
   const [url, setUrl] = useState("");
