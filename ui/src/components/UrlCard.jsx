@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { QrCode } from 'react-qrcode-pretty';
 
-const UrlCard = ({ urlObj, handleDelete, margin }) => {
+const UrlCard = ({ urlObj, handleDelete, handleRemoveUrl, margin }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const handleShare = () => {
@@ -22,7 +22,13 @@ const UrlCard = ({ urlObj, handleDelete, margin }) => {
 
     return (
         <div className={`card bg-base-100 shadow-xl ${margin} border border-gray-400 rounded-lg`}>
-            <div className="card-body flex flex-col md:flex-row items-center">
+            <div className="card-body flex flex-col md:flex-row items-center relative">
+                <button
+                    className="absolute top-4 right-4 cursor-pointer"
+                    onClick={() => handleRemoveUrl(urlObj.shortURL)}
+                >
+                    ✕
+                </button>
                 <div className="flex justify-center border shadow-xl border-gray-400 rounded-lg bg-clip-content mb-4 md:mb-0" onClick={toggleModal} role={'dialog'} aria-label={'QR Code Modal'}>
                     <QrCode
                         value={`${window.location.origin}/${urlObj.shortURL}`}

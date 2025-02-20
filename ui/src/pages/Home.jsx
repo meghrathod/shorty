@@ -11,6 +11,7 @@ function Home() {
     const [custom, setCustom] = useState(false);
     const [customKey, setCustomKey] = useState("");
     const [urls, setUrls] = useState([]);
+    const [removedUrls, setRemovedUrls] = useState([]);
     const [alert, setAlert] = useState({ show: false, message: "", variant: "" });
     const [deleteModal, setDeleteModal] = useState(false);
     const [deleteUrl, setDeleteUrl] = useState("");
@@ -49,6 +50,10 @@ function Home() {
         handleDelete(deleteUrl, pin, urls, setUrls, setAlert).then(handleCloseModal);
     }, [deleteUrl, pin, urls, setUrls, setAlert, handleCloseModal]);
 
+    const handleRemoveUrl = useCallback((shortURL) => {
+        setRemovedUrls((prev) => [...prev, shortURL]);
+    }, []);
+
     return (
         <div className="min-h-screen flex flex-col items-center justify-center p-4">
             <AlertComponent
@@ -73,10 +78,11 @@ function Home() {
             />
 
             <UrlList
-                urls={urls}
+                urls={urls.filter(urlObj => !removedUrls.includes(urlObj.shortURL))}
                 handleDelete={(shortURL, pin) =>
                     handleDelete(shortURL, pin, urls, setUrls, setAlert)
                 }
+                handleRemoveUrl={handleRemoveUrl}
             />
 
             <PinModal
