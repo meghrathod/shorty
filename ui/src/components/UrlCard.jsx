@@ -1,26 +1,24 @@
-import { useState } from "react";
-import { QrCode } from "react-qrcode-pretty";
+import React, { useState } from 'react';
+import { QrCode } from 'react-qrcode-pretty';
 
 const UrlCard = ({ urlObj, handleDelete, handleRemoveUrl, margin }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleShare = () => {
-    if (navigator.share) {
-      navigator
-        .share({
-          title: "Shortened URL",
-          text: `Hey there! Check this out: ${window.location.origin}/${urlObj.shortURL}`,
-          url: `${window.location.origin}/${urlObj.shortURL}`,
-        })
-        .catch((error) => console.error("Error sharing", error));
-    } else {
-      alert("Share not supported on this browser");
-    }
-  };
+    const handleShare = () => {
+        if (navigator.share) {
+            navigator.share({
+                title: 'Shortened URL',
+                text: `Hey there! Check this out: ${window.location.origin}/${urlObj.shortURL}`,
+                url: `${window.location.origin}/${urlObj.shortURL}`,
+            }).catch((error) => console.error('Error sharing', error));
+        } else {
+            alert('Share not supported on this browser');
+        }
+    };
 
-  const toggleModal = () => {
-    setIsModalOpen(!isModalOpen);
-  };
+    const toggleModal = () => {
+        setIsModalOpen(!isModalOpen);
+    };
 
   return (
     <div
