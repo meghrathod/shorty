@@ -6,7 +6,7 @@ import PinModal from "../components/PinModal.jsx";
 import { handleGenerate, handleDelete, showTemporaryAlert } from "../handlers";
 import { useNavigate } from "react-router-dom";
 
-const Home = ({setPin}) => {
+const Home = ({ setPin }) => {
   const [url, setUrl] = useState("");
   const [custom, setCustom] = useState(false);
   const [customKey, setCustomKey] = useState("");
@@ -115,6 +115,6 @@ const Home = ({setPin}) => {
       />
     </div>
   );
-}
+};
 
 export default Home;
