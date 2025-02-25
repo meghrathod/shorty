@@ -85,11 +85,10 @@ const UrlCard = ({ urlObj, handleDelete, handleRemoveUrl, margin, setPin }) => {
             <button
               className="btn btn-info btn-sm"
               onClick={() => {
-                localStorage.setItem('pin', urlObj.pin);
+                localStorage.setItem("pin", urlObj.pin);
                 setPin(urlObj.pin);
                 navigate(`/analytics/${urlObj.shortURL}`);
-              }
-              }
+              }}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
