@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { QrCode } from "react-qrcode-pretty";
+import { useNavigate } from "react-router-dom";
 
-const UrlCard = ({ urlObj, handleDelete, handleRemoveUrl, margin }) => {
+const UrlCard = ({ urlObj, handleDelete, handleRemoveUrl, margin, setPin }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const navigate = useNavigate();
 
   const handleShare = () => {
     if (navigator.share) {
@@ -82,8 +84,11 @@ const UrlCard = ({ urlObj, handleDelete, handleRemoveUrl, margin }) => {
           <div className="card-actions mt-4 flex justify-center md:justify-start">
             <button
               className="btn btn-info btn-sm"
-              onClick={() =>
-                (window.location.href = `/analytics?short_url=${urlObj.shortURL}&pin=${urlObj.pin}`)
+              onClick={() => {
+                localStorage.setItem('pin', urlObj.pin);
+                setPin(urlObj.pin);
+                navigate(`/analytics/${urlObj.shortURL}`);
+              }
               }
             >
               <svg

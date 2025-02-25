@@ -1,6 +1,6 @@
 import UrlCard from "./UrlCard.jsx";
 
-const UrlList = ({ urls, handleDelete, handleRemoveUrl }) => {
+const UrlList = ({ urls, handleDelete, handleRemoveUrl, setPin }) => {
   if (urls.length === 0) return null;
 
   return (
@@ -12,6 +12,7 @@ const UrlList = ({ urls, handleDelete, handleRemoveUrl }) => {
             urlObj={urlObj}
             handleDelete={handleDelete}
             handleRemoveUrl={handleRemoveUrl}
+            setPin={setPin}
             margin={
               index === urls.length - 1 || urls.length === 1 ? "" : "mb-4"
             }

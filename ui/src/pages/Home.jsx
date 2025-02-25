@@ -6,7 +6,7 @@ import PinModal from "../components/PinModal.jsx";
 import { handleGenerate, handleDelete, showTemporaryAlert } from "../handlers";
 import { useNavigate } from "react-router-dom";
 
-function Home() {
+const Home = ({setPin}) => {
   const [url, setUrl] = useState("");
   const [custom, setCustom] = useState(false);
   const [customKey, setCustomKey] = useState("");
@@ -102,6 +102,7 @@ function Home() {
           handleDelete(shortURL, pin, urls, setUrls, setAlert)
         }
         handleRemoveUrl={handleRemoveUrl}
+        setPin={setPin}
       />
 
       <PinModal

@@ -1,12 +1,9 @@
 import { useState, useEffect } from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
+import {Navigate, useParams} from 'react-router-dom';
 import LoaderPage from "./pages/LoaderPage.jsx";
 
-const ProtectedRoute = ({ element: Component, ...rest }) => {
-    const location = useLocation();
-    const queryParams = new URLSearchParams(location.search);
-    const shortUrl = queryParams.get('short_url');
-    const pin = queryParams.get('pin');
+const ProtectedRoute = ({ element: Component, pin, ...rest }) => {
+    const { shortUrl } = useParams();
     const [isAuthorized, setIsAuthorized] = useState(null);
     const [analyticsData, setAnalyticsData] = useState(null);
 

@@ -1,4 +1,5 @@
 import { QrCode } from 'react-qrcode-pretty';
+import React from "react";
 
 const AnalyticsPage = ({ analyticsData }) => {
     const { urlDetails, analytics } = analyticsData;
