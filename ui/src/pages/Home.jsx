@@ -102,7 +102,9 @@ const Home = ({ setPin }) => {
           handleDelete(shortURL, pin, urls, setUrls, setAlert)
         }
         handleRemoveUrl={handleRemoveUrl}
+
         setPin={setPin}
+
       />
 
       <PinModal
@@ -116,5 +118,6 @@ const Home = ({ setPin }) => {
     </div>
   );
 };
+
 
 export default Home;

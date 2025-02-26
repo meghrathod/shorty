@@ -1,4 +1,4 @@
-# Shorty : Shorten URLS and unintrusive analytics
+# Shorty : Shorten URLs and unintrusive analytics
 
 This project is a URL shortener and analytics application built with React for the frontend and Go for the backend. It allows users to shorten URLs, track analytics, and manage generated URLs.
 

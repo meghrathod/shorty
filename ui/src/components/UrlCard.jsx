@@ -6,6 +6,7 @@ const UrlCard = ({ urlObj, handleDelete, handleRemoveUrl, margin, setPin }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
 
+
   const handleShare = () => {
     if (navigator.share) {
       navigator
