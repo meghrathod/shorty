@@ -13,7 +13,6 @@ const UrlList = ({ urls, handleDelete, handleRemoveUrl, setPin }) => {
             handleDelete={handleDelete}
             handleRemoveUrl={handleRemoveUrl}
             setPin={setPin}
-
             margin={
               index === urls.length - 1 || urls.length === 1 ? "" : "mb-4"
             }
