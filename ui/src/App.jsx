@@ -9,7 +9,7 @@ import LoaderPage from "./pages/LoaderPage.jsx";
 import ThemeSwitcher from "./components/ThemeSwitcher.jsx";
 
 const App = () => {
-  const [pin , setPin] = useState(() => {
+  const [pin, setPin] = useState(() => {
     // Check if the pin exists in localStorage on initial render
     const storedPin = localStorage.getItem("pin");
     return storedPin || "";
