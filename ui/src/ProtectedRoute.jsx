@@ -8,6 +8,7 @@ const ProtectedRoute = ({ element: Component, pin, ...rest }) => {
   const [analyticsData, setAnalyticsData] = useState(null);
 
   useEffect(() => {
+    const abortController = new AbortController();
     const verifyPin = async () => {
       try {
         const response = await fetch(
@@ -33,6 +34,10 @@ const ProtectedRoute = ({ element: Component, pin, ...rest }) => {
     };
 
     verifyPin();
+
+    return () => {
+      abortController.abort();
+    };
   }, [shortUrl, pin]);
 
   if (isAuthorized === null) {

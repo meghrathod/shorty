@@ -8,6 +8,7 @@ const RedirectHandler = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
+        const abortController = new AbortController();
 
         const fetchUrl = async () => {
             try {
@@ -27,6 +28,7 @@ const RedirectHandler = () => {
                 );
                 if (response.ok) {
                     const data = await response.json();
+                    console.log(data)
                     window.location.href = data.url;
                 } else {
                     navigate('/404');
@@ -36,6 +38,10 @@ const RedirectHandler = () => {
             }
         };
         fetchUrl();
+
+        return () => {
+            abortController.abort();
+        }
     }, [shortUrl, navigate]);
 
     return <LoaderPage message={"Redirecting..."}/>;
