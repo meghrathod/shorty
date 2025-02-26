@@ -247,7 +247,7 @@ func getIP(r *http.Request) (string, string, string, error) {
 
 func useGeoIP(ip string) (string, string, error) {
 	path := ""
-	if os.Getenv("APP_ENV") == "development" {
+	if os.Getenv("APP_ENV") == "development_local" {
 		path = "GeoLite2-City.mmdb"
 	} else {
 		path = "/usr/local/share/GeoIP/GeoLite2-City.mmdb"
