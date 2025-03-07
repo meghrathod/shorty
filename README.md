@@ -53,7 +53,6 @@ This project is a URL shortener and analytics application built with React for t
    yarn dev
    ```
 
-
 ## Usage
 
 1. Access the application in your browser at `http://localhost:3000`.
