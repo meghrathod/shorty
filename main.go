@@ -13,7 +13,7 @@ import (
 
 func main() {
 	appEnv := os.Getenv("APP_ENV") // Check for environment: development/production
-	if appEnv == "development" {
+	if appEnv == "development" || appEnv == "development_local" {
 		err := godotenv.Load()
 		if err != nil {
 			log.Println("No .env file found, relying on system environment variables")
