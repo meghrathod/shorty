@@ -37,7 +37,7 @@ const UrlInputForm = ({ url, setUrl, handleGenerate, handleDeleteClick, custom, 
                                 <input
                                     type="checkbox"
                                     id="custom"
-                                    className="checkbox checkbox-sm focus:outline-none focus:ring-0 focus:border-gray-400"
+                                    className="checkbox checkbox-sm border-secondary-content"
                                     checked={custom}
                                     onChange={handleCheckboxChange}
                                     style={{ '--input-color': 'transparent' }}
