@@ -10,13 +10,11 @@ import ThemeSwitcher from "./components/ThemeSwitcher.jsx";
 
 const App = () => {
   const [pin, setPin] = useState(() => {
-    // Check if the pin exists in localStorage on initial render
     const storedPin = localStorage.getItem("pin");
     return storedPin || "";
   });
 
   useEffect(() => {
-    // Update localStorage when pin changes
     if (pin) {
       localStorage.setItem("pin", pin);
     }
