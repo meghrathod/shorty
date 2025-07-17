@@ -86,6 +86,16 @@ func createURL(url string, db *sql.DB, custom bool, customKey string) (shortURL,
 	}
 }
 
+// saveURL persists a generated shortURL into the database.
+func saveURL(url shortURL, db *sql.DB) error {
+	stmt, err := db.Prepare("INSERT INTO urls (name, redirect_url, date_created, pin) VALUES ($1, $2, $3, $4)")
+	if err != nil {
+		return err
+	}
+	_, err = stmt.Exec(url.ShortURL, url.Url, url.DateCreated, url.Pin)
+	return err
+}
+
 func generateCustomKey(db *sql.DB, customKey string) (string, error) {
 	stmt, err := db.Prepare("SELECT count(name) FROM urls where name = $1")
 	if err != nil {

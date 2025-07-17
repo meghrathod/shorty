@@ -23,6 +23,8 @@ func main() {
 	}
 
 	db := initDB()
+	// Start MCP server in a separate goroutine
+	startMCPServer(db)
 	http.HandleFunc("/{path...}", enableCors(func(w http.ResponseWriter, r *http.Request) {
 		handleURL(w, r, db)
 	}))
