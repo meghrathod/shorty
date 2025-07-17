@@ -44,6 +44,7 @@ SHORTEN https://example.com CUSTOM key
 ```
 
 The server will respond with the short URL and PIN.
+
 ### Frontend Setup
 
 1. Navigate to the `ui` directory:
