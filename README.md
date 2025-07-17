@@ -33,6 +33,18 @@ This project is a URL shortener and analytics application built with React for t
    go run main.go
    ```
 
+### MCP Server
+
+A lightweight TCP-based server runs in parallel with the HTTP server. Set the `MCP_PORT` environment variable to configure the port (defaults to `5555`). Use a TCP client to connect and send commands like:
+
+```
+PING
+SHORTEN https://example.com
+SHORTEN https://example.com CUSTOM key
+```
+
+The server will respond with the short URL and PIN.
+
 ### Frontend Setup
 
 1. Navigate to the `ui` directory:
